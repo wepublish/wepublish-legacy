@@ -1,0 +1,19 @@
+{
+  "name": "@wepublish/server",
+  "version": "0.0.0",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir ./lib --declaration",
+    "watch": "tsc --outDir ./lib --declaration --watch",
+    "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
+  },
+  "dependencies": {
+    "fastify": "^1.13.4"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "typescript": "^3.2.2"
+  }
+}

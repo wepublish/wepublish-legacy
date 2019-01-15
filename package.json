@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "license": "MIT",
+  "version": "0.0.0",
+  "engines": {
+    "node": "10.15.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "example"
+  ],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "sync-package-info": "yarn workspaces run sync-package-info",
+    "start:example": "yarn workspace @wepublish/example start"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@wepublish/example",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack client=./src/client.js worker=./src/worker.js --mode production",
+    "watch": "webpack client=./src/client.js worker=./src/worker.js --mode development --watch",
+    "start": "node ./server.js",
+    "sync-package-info": "true"
+  },
+  "dependencies": {
+    "@wepublish/server": "0.0.0"
+  },
+  "devDependencies": {
+    "@wepublish/client": "0.0.0",
+    "@wepublish/worker": "0.0.0",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
+  }
+}

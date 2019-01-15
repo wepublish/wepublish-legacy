@@ -1,0 +1,15 @@
+{
+  "name": "@wepublish/client",
+  "version": "0.0.0",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir ./lib --declaration",
+    "watch": "tsc --outDir ./lib --declaration --watch",
+    "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
+  },
+  "devDependencies": {
+    "typescript": "^3.2.2"
+  }
+}
