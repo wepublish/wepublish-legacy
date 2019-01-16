@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc --outDir ./lib --declaration",
-    "watch": "tsc --outDir ./lib --declaration --watch",
+    "build": "tsc --outDir ./lib --declaration --declarationMap",
+    "watch": "tsc --outDir ./lib --declaration --declarationMap --watch",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "devDependencies": {

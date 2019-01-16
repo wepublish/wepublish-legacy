@@ -5,15 +5,23 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc --outDir ./lib --declaration",
-    "watch": "tsc --outDir ./lib --declaration --watch",
+    "build": "tsc --outDir ./lib --declaration --declarationMap",
+    "watch": "tsc --outDir ./lib --declaration --declarationMap --watch",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {
-    "fastify": "^1.13.4"
+    "fastify": "^1.13.4",
+    "fastify-static": "^1.1.0",
+    "fastify-compress": "^0.8.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "route-trie": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/fastify-static": "^0.14.0",
     "typescript": "^3.2.2"
   }
 }
