@@ -9,7 +9,12 @@
     "watch": "tsc --outDir ./lib --declaration --declarationMap --watch",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
+  "dependencies": {
+    "route-trie": "^3.0.0",
+    "query-string": "^6.2.0"
+  },
   "devDependencies": {
+    "@types/query-string": "^6.2.0",
     "typescript": "^3.2.2"
   }
 }

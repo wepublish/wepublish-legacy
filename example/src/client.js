@@ -1,2 +1,2 @@
-import wepublish from '@wepublish/client'
+import * as wepublish from '@wepublish/client'
 wepublish.mount()

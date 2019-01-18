@@ -1,1 +1,1 @@
-import wepublish from '@wepublish/worker'
+import * as wepublish from '@wepublish/worker'

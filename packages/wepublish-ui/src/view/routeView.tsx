@@ -1,32 +1,27 @@
 import React from 'react'
-import {Route, RouteID} from '@wepublish/common'
-import {RouteContext} from '../context/routeContext'
+import {Route, RouteType} from '@wepublish/common'
+import {withRouteContext, WithRouteContext} from '../context/routeContext'
+import {FrontView} from './frontView'
 
-export interface IRouteViewProps {}
-export interface IRouteViewState {}
+export interface RouteViewProps extends WithRouteContext {}
 
-export class RouteView extends React.Component<
-  IRouteViewProps,
-  IRouteViewState
-> {
+export class RouteView extends React.Component<RouteViewProps> {
   public render(): React.ReactNode {
-    return (
-      <RouteContext.Consumer>
-        {context => this.viewForRoute(context.route)}
-      </RouteContext.Consumer>
-    )
+    return this.viewForRoute(this.props.routeContext.route)
   }
 
   private viewForRoute(route: Route): React.ReactNode {
-    switch (route.id) {
-      case RouteID.Front:
-        return <div>Front!</div>
+    switch (route.type) {
+      case RouteType.Front:
+        return <FrontView blocks={route.blocks} />
 
-      case RouteID.Article:
+      case RouteType.Article:
         return <div>Article!</div>
 
-      case RouteID.NotFound:
+      case RouteType.NotFound:
         return <div>404 Not Found!</div>
     }
   }
 }
+
+export const RoutedRouteView = withRouteContext(RouteView)

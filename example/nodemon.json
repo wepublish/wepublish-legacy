@@ -1,0 +1,8 @@
+{
+  "watch": [
+    "../node_modules/@wepublish/server/lib/**/*.js",
+    "../node_modules/@wepublish/common/lib/**/*.js",
+    "../node_modules/@wepublish/ui/lib/**/*.js",
+    "./server.js"],
+  "ignoreRoot": []
+}

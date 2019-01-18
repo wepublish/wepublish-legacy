@@ -1,4 +1,6 @@
 export * from './style'
 export * from './context/routeContext'
+export * from './context/themeContext'
 export * from './view/applicationView'
 export * from './view/routeView'
+export * from './view/frontView'
