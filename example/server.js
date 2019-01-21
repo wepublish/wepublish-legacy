@@ -1,3 +1,5 @@
+require('dotenv-safe').config()
+
 const wepublish = require('@wepublish/server')
 
 wepublish.startServer({
