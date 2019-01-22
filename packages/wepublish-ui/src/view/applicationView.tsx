@@ -2,22 +2,21 @@ import React from 'react'
 
 import {Route} from '@wepublish/common'
 import {HistoryRouteContextProvider} from '../context/routeContext'
-import {StaticThemeContextProvider, Theme} from '../context/themeContext'
-import {RoutedRouteView} from './routeView'
+import {StaticThemeContextProvider} from '../context/themeContext'
 
-export interface ApplicationViewProps {
+import {ApplicationOptions} from '../option'
+import {RouteView} from './routeView'
+
+export interface ApplicationViewProps extends ApplicationOptions {
   initialRoute: Route
-  theme?: Theme
 }
 
-export class ApplicationView extends React.Component<ApplicationViewProps> {
-  public render(): React.ReactNode {
-    return (
-      <HistoryRouteContextProvider initialRoute={this.props.initialRoute}>
-        <StaticThemeContextProvider theme={this.props.theme}>
-          <RoutedRouteView />
-        </StaticThemeContextProvider>
-      </HistoryRouteContextProvider>
-    )
-  }
+export function ApplicationView(props: ApplicationViewProps) {
+  return (
+    <HistoryRouteContextProvider initialRoute={props.initialRoute}>
+      <StaticThemeContextProvider theme={props.theme}>
+        <RouteView />
+      </StaticThemeContextProvider>
+    </HistoryRouteContextProvider>
+  )
 }

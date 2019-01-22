@@ -1,36 +1,40 @@
 import React from 'react'
 import {Block, CoreBlockType} from '@wepublish/common'
-import {ThemedArticleBlock} from '../block/articleBlock'
-import {ThemedContentWrapper} from '../components/contentWrapper'
+import {ArticleBlock} from '../block/articleBlock'
+import {ContentWrapper} from '../components/contentWrapper'
+import {Inset, InsetContent} from '../components/inset'
 
 export interface FrontViewProps {
   blocks?: Block[]
 }
 
-export interface FrontViewState {}
+export const frontViewInset: Inset = {
+  top: 5,
+  left: 4,
+  right: 4,
+  bottom: 5
+}
 
-export class FrontView extends React.Component<FrontViewProps, FrontViewState> {
-  public render(): React.ReactNode {
-    if (!this.props.blocks) return null
+export function FrontView(props: FrontViewProps) {
+  if (!props.blocks) return null
 
-    return (
-      <ThemedContentWrapper>
-        {this.props.blocks.map(block => (
-          <React.Fragment key={block.id}>
-            {this.viewForBlock(block)}
-          </React.Fragment>
+  return (
+    <ContentWrapper>
+      <InsetContent inset={frontViewInset}>
+        {props.blocks.map(block => (
+          <React.Fragment key={block.id}>{viewForBlock(block)}</React.Fragment>
         ))}
-      </ThemedContentWrapper>
-    )
-  }
+      </InsetContent>
+    </ContentWrapper>
+  )
+}
 
-  private viewForBlock(block: Block) {
-    switch (block.type) {
-      case CoreBlockType.Article:
-        return <ThemedArticleBlock article={block.data} />
+function viewForBlock(block: Block) {
+  switch (block.type) {
+    case CoreBlockType.Article:
+      return <ArticleBlock article={block.data} />
 
-      default:
-        return <div>Unknown block</div>
-    }
+    default:
+      return <div>Unknown block</div>
   }
 }

@@ -3,6 +3,8 @@ require('dotenv-safe').config()
 const wepublish = require('@wepublish/server')
 
 wepublish.startServer({
+  clientPath: './dist/client.js',
+  workerPath: './dist/worker.js',
   dataSource: new wepublish.WeightedAggregatorDataSource(
     {
       id: 'test',

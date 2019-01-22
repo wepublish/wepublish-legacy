@@ -1,4 +1,5 @@
 import path from 'path'
+import http from 'http'
 
 import fastify from 'fastify'
 import fastifyStatic from 'fastify-static'
@@ -8,7 +9,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/server'
 import {getStyles} from 'typestyle'
 
-import {ApplicationView, initializeCSSRules} from '@wepublish/ui'
+import {
+  ApplicationView,
+  initializeCSSRules,
+  ApplicationOptions
+} from '@wepublish/ui'
 
 import {
   CoreBlockType,
@@ -19,12 +24,12 @@ import {
 } from '@wepublish/common'
 
 import {DataSource} from './dataSource/interface'
-import {ApplicationViewProps, Theme} from '@wepublish/ui/src'
 
-export interface ServerOptions {
+export interface ServerOptions extends ApplicationOptions {
   port?: number
   dataSource: DataSource
-  theme?: Theme
+  clientPath: string
+  workerPath: string
 }
 
 export class Server {
@@ -38,10 +43,37 @@ export class Server {
     })
 
     this.httpServer.register(fastifyCompress)
-
     this.httpServer.register(fastifyStatic, {
       root: path.resolve(process.cwd(), './dist'),
-      prefix: '/static'
+      prefix: '/static',
+      setHeaders: (res: http.ServerResponse) => {
+        res.setHeader('Service-Worker-Allowed', '/')
+      }
+    })
+
+    this.httpServer.get('/manifest.json', (_req, res) => {
+      // TODO: Config
+      res.send({
+        short_name: 'Test',
+        name: 'Test',
+        icons: [
+          {
+            src: '/images/icons-192.png',
+            type: 'image/png',
+            sizes: '192x192'
+          },
+          {
+            src: '/images/icons-512.png',
+            type: 'image/png',
+            sizes: '512x512'
+          }
+        ],
+        start_url: '/',
+        background_color: '#000000',
+        display: 'standalone',
+        scope: '/',
+        theme_color: '#000000'
+      })
     })
 
     this.httpServer.get('/api/route/*', async (req, res) => {
@@ -50,12 +82,12 @@ export class Server {
 
     this.httpServer.get('*', async (req, res) => {
       const route = await this.getRouteWithData(req.params['*'], req.query)
-      const initialProps: ApplicationViewProps = {
-        initialRoute: route,
-        theme: opts.theme
+
+      const initialProps = {
+        initialRoute: route
       }
 
-      const component = <ApplicationView {...initialProps} />
+      const component = <ApplicationView {...initialProps} theme={opts.theme} />
       const componentString = ReactDOM.renderToString(component)
 
       const markup = ReactDOM.renderToStaticMarkup(
@@ -65,6 +97,7 @@ export class Server {
               name="viewport"
               content="width=device-width, initial-scale=1, user-scalable=no"
             />
+            <link rel="manifest" href="/manifest.json" />
             <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
             <script defer src="/static/client.js" />
             <script

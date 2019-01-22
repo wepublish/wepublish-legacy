@@ -1,24 +1,23 @@
-import React from 'react'
+import React, {useContext, ReactNode} from 'react'
 import {Route, reverseRoute} from '@wepublish/common'
-import {withRouteContext, WithRouteContext} from '../context/routeContext'
+import {RouteContext} from '../context/routeContext'
 
-export interface LinkProps extends WithRouteContext {
+export interface LinkProps {
   route: Route
+  children?: ReactNode
 }
 
-export class Link extends React.Component<LinkProps> {
-  private handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    this.props.routeContext.push(this.props.route)
-  }
+export function Link(props: LinkProps) {
+  const routeContext = useContext(RouteContext)
 
-  public render(): React.ReactNode {
-    return (
-      <a href={reverseRoute(this.props.route)} onClick={this.handleClick}>
-        {this.props.children}
-      </a>
-    )
-  }
+  return (
+    <a
+      href={reverseRoute(props.route)}
+      onClick={e => {
+        e.preventDefault()
+        routeContext.push(props.route)
+      }}>
+      {props.children}
+    </a>
+  )
 }
-
-export const LinkWithRouteContext = withRouteContext(Link)

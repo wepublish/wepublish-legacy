@@ -1,12 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {ApplicationView, initializeCSSRules} from '@wepublish/ui'
+import {
+  ApplicationView,
+  initializeCSSRules,
+  ApplicationOptions
+} from '@wepublish/ui'
 import {version, moduleName} from './version'
 
-export interface ClientOptions {}
+export interface ClientOptions extends ApplicationOptions {}
 
-export function mount(_opts?: ClientOptions) {
+export function mount(_opts: ClientOptions) {
   if (
     document.readyState == 'complete' ||
     document.readyState == 'interactive'
@@ -18,11 +22,13 @@ export function mount(_opts?: ClientOptions) {
 }
 
 function initialize() {
-  console.info(`Initializing ${moduleName} v${version}`)
+  console.info(`Initializing ${moduleName} v${version}.`)
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/worker.js')
-    console.info('Registered service worker')
+    navigator.serviceWorker.register('/static/worker.js', {
+      scope: '/'
+    })
+    console.info('Registered service worker.')
   }
 
   const styleElement = document.querySelector('#style')

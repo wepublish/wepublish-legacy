@@ -1,5 +1,5 @@
-import React from 'react'
-import {createContextHOC} from './contextHOC'
+import React, {useContext, useMemo} from 'react'
+import {style, types} from 'typestyle'
 
 export interface Theme {
   colors: {
@@ -27,16 +27,6 @@ export type ThemeContext = Theme
 
 export const ThemeContext = React.createContext<ThemeContext>(defaultTheme)
 
-export interface WithThemeContext {
-  themeContext: ThemeContext
-}
-
-export const withThemeContext = createContextHOC(
-  ThemeContext,
-  'themeContext',
-  'Themed'
-)
-
 export interface StaticThemeContextProviderProps {
   theme?: Theme
 }
@@ -57,4 +47,19 @@ export class StaticThemeContextProvider extends React.Component<
       </ThemeContext.Provider>
     )
   }
+}
+
+export type StyleProps = (
+  | false
+  | types.NestedCSSProperties
+  | null
+  | undefined)[]
+
+export function useTheme(styleFn: (theme: Theme) => StyleProps) {
+  const themeContext = useContext(ThemeContext)
+  const className = useMemo(() => style(...styleFn(themeContext)), [
+    themeContext
+  ])
+
+  return className
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import {RouteType, Route, reverseRoute, matchRoute} from '@wepublish/common'
-import {createContextHOC} from './contextHOC'
 
 export type RouteContext = {
   route: Route
@@ -15,16 +14,6 @@ export const RouteContext = React.createContext<RouteContext>({
   replace: () => {},
   pop: () => {}
 })
-
-export interface WithRouteContext {
-  routeContext: RouteContext
-}
-
-export const withRouteContext = createContextHOC(
-  RouteContext,
-  'routeContext',
-  'Routed'
-)
 
 export interface HistoryRouteContextProviderProps {
   initialRoute: Route

@@ -1,17 +1,15 @@
-import React from 'react'
-import memoizeOne from 'memoize-one'
-import {style, media} from 'typestyle'
-
-import {
-  Theme,
-  withThemeContext,
-  WithThemeContext
-} from '../context/themeContext'
+import React, {ReactNode} from 'react'
+import {useTheme} from '../context/themeContext'
 
 import {NavigationIcon} from './icons'
+import {media} from 'typestyle'
 
-const contentWrapperStyle = memoizeOne((theme: Theme) => {
-  return style(
+export interface ContentWrapperProps {
+  children: ReactNode
+}
+
+export function ContentWrapper(props: ContentWrapperProps) {
+  const className = useTheme(theme => [
     {
       display: 'flex',
       flexDirection: 'column',
@@ -48,22 +46,14 @@ const contentWrapperStyle = memoizeOne((theme: Theme) => {
         }
       }
     )
-  )
-})
+  ])
 
-export interface ContentWrapperProps extends WithThemeContext {}
-
-export class ContentWrapper extends React.Component<ContentWrapperProps> {
-  public render(): React.ReactNode {
-    return (
-      <div className={contentWrapperStyle(this.props.themeContext)}>
-        <div className="navigationBar">
-          <NavigationIcon themeContext={this.props.themeContext} />
-        </div>
-        <div className="content">{this.props.children}</div>
+  return (
+    <div className={className}>
+      <div className="navigationBar">
+        <NavigationIcon />
       </div>
-    )
-  }
+      <div className="content">{props.children}</div>
+    </div>
+  )
 }
-
-export const ThemedContentWrapper = withThemeContext(ContentWrapper)
