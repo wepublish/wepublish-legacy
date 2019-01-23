@@ -1,5 +1,6 @@
-import {Article} from '@wepublish/common'
+import {Article, ListArticle} from '@wepublish/common'
 
 export interface DataSource {
-  getArticles(from: Date, to: Date): Promise<Article[]>
+  getArticle(id: string): Promise<Article>
+  getArticles(from: Date, to: Date): Promise<ListArticle[]>
 }

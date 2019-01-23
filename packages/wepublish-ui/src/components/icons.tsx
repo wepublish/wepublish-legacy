@@ -1,10 +1,11 @@
 import React from 'react'
-import {useTheme} from '../context/themeContext'
+import {useThemeStyle} from '../context/themeContext'
 
 export function NavigationIcon() {
-  const className = useTheme(theme => [
+  const className = useThemeStyle(theme => [
     {
       height: '1em',
+      position: 'absolute',
       fill: theme.colors.primaryTextColor
     }
   ])

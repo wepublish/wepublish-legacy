@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "webpack client=./src/client.js worker=./src/worker.js --mode production",
+    "build": "webpack client=./src/client.js worker=./src/worker.js --mode production --devtool source-map --progress",
     "watch": "run-p watch:*",
-    "watch:client": "webpack client=./src/client.js worker=./src/worker.js --mode development --watch",
+    "watch:client": "webpack client=./src/client.js worker=./src/worker.js --mode development --watch --devtool cheap-eval-source-map --progress",
     "watch:server": "nodemon server.js",
     "start": "node ./server.js",
     "sync-package-info": "exit 0"

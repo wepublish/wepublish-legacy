@@ -77,6 +77,8 @@ export class HistoryRouteContextProvider extends React.Component<
 
     const path = reverseRoute(route)
     const response = await fetch(`/api/route${path}`)
+    const route: Route = await response.json()
+
     this.setState({route: await response.json()})
   }
 

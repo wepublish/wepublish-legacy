@@ -1,14 +1,14 @@
 import React from 'react'
 import {Article, RouteType} from '@wepublish/common'
 import {Link} from '../components/link'
-import {useTheme} from '../context/themeContext'
+import {useThemeStyle} from '../context/themeContext'
 
 export interface ArticleBlockProps {
   article: Article
 }
 
 export function ArticleBlock(props: ArticleBlockProps) {
-  const className = useTheme(theme => [
+  const className = useThemeStyle(theme => [
     {
       backgroundColor: theme.colors.color3
     }

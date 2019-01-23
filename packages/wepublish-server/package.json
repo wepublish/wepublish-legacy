@@ -21,6 +21,7 @@
     "@types/react": "^16.7.20",
     "@types/react-dom": "^16.0.11",
     "@types/fastify-static": "^0.14.0",
+    "@types/slate": "^0.43.8",
     "@karma.run/sdk": "beta",
     "typescript": "^3.2.2"
   }

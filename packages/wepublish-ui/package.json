@@ -13,11 +13,11 @@
     "react": "^16.8.0-alpha.1",
     "typestyle": "^2.0.1",
     "csx": "^9.0.0",
-    "memoize-one": "^5.0.0"
+    "slate": "^0.44.9"
   },
   "devDependencies": {
     "@types/react": "^16.7.20",
-    "@types/memoize-one": "^4.1.0",
+    "@types/slate": "^0.43.8",
     "typescript": "^3.2.2"
   }
 }

@@ -1,19 +1,21 @@
 import React, {ReactNode} from 'react'
-import {useTheme} from '../context/themeContext'
+import {useThemeStyle, useTheme} from '../context/themeContext'
 
 import {NavigationIcon} from './icons'
 import {media} from 'typestyle'
+import {em, percent, rem, viewHeight, px} from 'csx'
 
 export interface ContentWrapperProps {
   children: ReactNode
 }
 
 export function ContentWrapper(props: ContentWrapperProps) {
-  const className = useTheme(theme => [
+  const className = useThemeStyle(theme => [
     {
+      $debugName: 'ContentWrapper',
+
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: theme.colors.color2,
       width: '100%',
 
       $nest: {
@@ -24,12 +26,20 @@ export function ContentWrapper(props: ContentWrapperProps) {
           position: 'sticky',
           top: 0,
           backgroundColor: theme.colors.color1,
-          fontSize: '2.2rem',
-          padding: '2rem 1.6rem'
+          borderBottom: `${px(1)} solid ${theme.colors.color4}`,
+          fontSize: rem(2.2),
+          padding: `${rem(1.6)} ${rem(2)}`,
+
+          $nest: {
+            '> .logo': {
+              height: em(1),
+              margin: '0 auto'
+            }
+          }
         },
 
         '> .content': {
-          width: '100%'
+          width: percent(100)
         }
       }
     },
@@ -41,19 +51,31 @@ export function ContentWrapper(props: ContentWrapperProps) {
         $nest: {
           '> .navigationBar': {
             flexDirection: 'column',
-            height: '100vh'
+            height: viewHeight(100),
+            borderBottom: 'none',
+            borderRight: `${px(1)} solid ${theme.colors.color4}`,
+            padding: rem(2.6),
+
+            $nest: {
+              '> .logo': {
+                display: 'none'
+              }
+            }
           }
         }
       }
     )
   ])
 
+  const logo = useTheme(theme => <theme.logoComponent className="logo" />)
+
   return (
-    <div className={className}>
-      <div className="navigationBar">
+    <header className={className}>
+      <nav className="navigationBar">
         <NavigationIcon />
-      </div>
+        {logo}
+      </nav>
       <div className="content">{props.children}</div>
-    </div>
+    </header>
   )
 }

@@ -1,6 +1,6 @@
 import {Trie} from 'route-trie'
 import * as qs from 'query-string'
-import {Block, Article} from './model'
+import {Block, Article, ArticleJSON} from './model'
 
 export enum RouteType {
   NotFound = 'notFound',
@@ -23,7 +23,19 @@ export interface NotFoundRoute {
   type: RouteType.NotFound
 }
 
+export interface FrontRouteJSON {
+  type: RouteType.Front
+  blocks?: Block[]
+}
+
+export interface ArticleRouteJSON {
+  type: RouteType.Article
+  articleID: string
+  article: ArticleJSON
+}
+
 export type Route = FrontRoute | ArticleRoute | NotFoundRoute
+export type RouteJSON = FrontRouteJSON | ArticleRouteJSON | NotFoundRoute
 
 const router = new Trie()
 const articleNode = router.define('/article/:id')

@@ -21,11 +21,6 @@
   dependencies:
     fastify "^1.11.2"
 
-"@types/memoize-one@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@types/memoize-one/-/memoize-one-4.1.0.tgz#62119f26055b3193ae43ca1882c5b29b88b71ece"
-  integrity sha512-cmSgi6JMX/yBwgpVm4GooNWIH+vEeJoa8FAa6ExOhpJbC0Juq32/uYKiKb3VPSqrEA0aOnjvwZanla3O1WZMbw==
-
 "@types/node@*", "@types/node@^10.12.18":
   version "10.12.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
@@ -71,6 +66,14 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
+
+"@types/slate@^0.43.8":
+  version "0.43.8"
+  resolved "https://registry.yarnpkg.com/@types/slate/-/slate-0.43.8.tgz#add8f65c0bcb3a1682ccbc72a30efa0326a10991"
+  integrity sha512-9NqrE8HYe7yqmNW6oNXMXz+yQHR/zcBPEeO7soaQM9T1jiXxxkn8ft0WW9JY3KR7rbBp82euFzOMpi2fIuCYmw==
+  dependencies:
+    "@types/react" "*"
+    immutable "^3.8.2"
 
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
@@ -1045,6 +1048,11 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
+direction@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/direction/-/direction-0.1.5.tgz#ce5d797f97e26f8be7beff53f7dc40e1c1a9ec4c"
+  integrity sha1-zl15f5fib4vnvv9T99xA4cGp7Ew=
+
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
@@ -1201,6 +1209,11 @@ esrecurse@^4.1.0:
   integrity sha512-64RBB++fIOAXPw3P9cy89qfMlvZEXZkqqJkjqqXIvzP5ezRZjW+lPWjw35UX/3EhUPFYbg5ER4JYgDw4007/DQ==
   dependencies:
     estraverse "^4.1.0"
+
+esrever@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/esrever/-/esrever-0.2.0.tgz#96e9d28f4f1b1a76784cd5d490eaae010e7407b8"
+  integrity sha1-lunSj08bGnZ4TNXUkOquAQ50B7g=
 
 estraverse@^4.1.0, estraverse@^4.1.1:
   version "4.2.0"
@@ -1782,6 +1795,11 @@ ignore-walk@^3.0.1:
   dependencies:
     minimatch "^3.0.4"
 
+immutable@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+  integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
+
 import-lazy@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/import-lazy/-/import-lazy-2.1.0.tgz#05698e3d45c88e8d7e9d92cb0584e77f096f3e43"
@@ -2219,6 +2237,11 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
+lodash@^4.17.4:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
+  integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+
 loose-envify@^1.1.0, loose-envify@^1.3.1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -2289,11 +2312,6 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^1.0.0"
     p-is-promise "^1.1.0"
-
-memoize-one@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.0.0.tgz#d55007dffefb8de7546659a1722a5d42e128286e"
-  integrity sha512-7g0+ejkOaI9w5x6LvQwmj68kUj6rxROywPSCqmclG/HBacmFnZqhVscQ8kovkn9FBCNJmOz6SY42+jnvZzDWdw==
 
 memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"
@@ -3428,6 +3446,20 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
+slate@^0.44.9:
+  version "0.44.9"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.44.9.tgz#0fc9ba9f08b379b86c4c0a1ddebbe6bf28aa3c4b"
+  integrity sha512-PKZUVZU416UJKuOakNvhJ5qh2umjPdkaO41Wf8x1xnkFe4IQcZuw3ZTWWm35rYD7fd0X238uEnxIqF5RuxENlA==
+  dependencies:
+    debug "^3.1.0"
+    direction "^0.1.5"
+    esrever "^0.2.0"
+    is-plain-object "^2.0.4"
+    lodash "^4.17.4"
+    tiny-invariant "^1.0.1"
+    tiny-warning "^0.0.3"
+    type-of "^2.0.1"
+
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -3756,10 +3788,20 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
+tiny-invariant@^1.0.1:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.0.3.tgz#91efaaa0269ccb6271f0296aeedb05fc3e067b7a"
+  integrity sha512-ytQx8T4DL8PjlX53yYzcIC0WhIZbpR0p1qcYjw2pHu3w6UtgWwFJQ/02cnhOnBBhlFx/edUIfcagCaQSe3KMWg==
+
 tiny-lru@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-2.0.0.tgz#1491ae2bd82d658246290fe48334039836cc6146"
   integrity sha512-LcvsiH/JYkeItdNK5w8EJjlHcOuaULkpjA97cfLBMvylHKlXAcccNFqKUw4EGhbYaFnhn6q7xqfTyO0xIOj59Q==
+
+tiny-warning@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-0.0.3.tgz#1807eb4c5f81784a6354d58ea1d5024f18c6c81f"
+  integrity sha512-r0SSA5Y5IWERF9Xh++tFPx0jITBgGggOsRLDWWew6YRw/C2dr4uNO1fw1vanrBmHsICmPyMLNBZboTlxUmUuaA==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
@@ -3812,6 +3854,11 @@ tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
   integrity sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=
+
+type-of@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/type-of/-/type-of-2.0.1.tgz#e72a1741896568e9f628378d816d6912f7f23972"
+  integrity sha1-5yoXQYllaOn2KDeNgW1pEvfyOXI=
 
 typedarray@^0.0.6:
   version "0.0.6"

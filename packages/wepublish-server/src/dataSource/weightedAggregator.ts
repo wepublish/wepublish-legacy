@@ -1,4 +1,4 @@
-import {Article} from '@wepublish/common'
+import {Article, ListArticle} from '@wepublish/common'
 import {DataSource} from './interface'
 
 export interface WeightedDataSource {
@@ -15,11 +15,33 @@ export class WeightedAggregatorDataSource {
     this.dataSources = dataSources
   }
 
+  private prefixListArticleID(article: ListArticle, id: string): ListArticle {
+    return {...article, id: `${id}-${article.id}`}
+  }
+
   private prefixArticleID(article: Article, id: string): Article {
     return {...article, id: `${id}-${article.id}`}
   }
 
-  public async getArticles(from: Date, to: Date): Promise<Article[]> {
+  public async getArticle(id: string): Promise<Article> {
+    const dataSourceID = id.split('-')[0]
+    const articleID = id.substr(dataSourceID.length + 1)
+
+    const dataSource = this.dataSources.find(
+      dataSource => dataSource.id == dataSourceID
+    )
+
+    if (!dataSource) {
+      throw new Error(`Couldn't find dataSource for ID: ${dataSourceID}`)
+    }
+
+    return this.prefixArticleID(
+      await dataSource.dataSource.getArticle(articleID),
+      dataSource.id
+    )
+  }
+
+  public async getArticles(from: Date, to: Date): Promise<ListArticle[]> {
     const promises = this.dataSources.map(dataSource =>
       dataSource.dataSource.getArticles(from, to)
     )
@@ -34,7 +56,9 @@ export class WeightedAggregatorDataSource {
         const weight = dataSource.weight
 
         // Prefix article IDs with DataSource ID.
-        articles = articles.map(article => this.prefixArticleID(article, id))
+        articles = articles.map(article =>
+          this.prefixListArticleID(article, id)
+        )
 
         if (weight >= 1) {
           acc.push(...articles)

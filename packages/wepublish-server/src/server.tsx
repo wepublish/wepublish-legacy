@@ -1,8 +1,7 @@
 import path from 'path'
-import http from 'http'
+import fs from 'fs'
 
 import fastify from 'fastify'
-import fastifyStatic from 'fastify-static'
 import fastifyCompress from 'fastify-compress'
 
 import React from 'react'
@@ -18,6 +17,7 @@ import {
 import {
   CoreBlockType,
   Article,
+  ListArticle,
   RouteType,
   matchRoute,
   Route
@@ -26,10 +26,10 @@ import {
 import {DataSource} from './dataSource/interface'
 
 export interface ServerOptions extends ApplicationOptions {
-  port?: number
-  dataSource: DataSource
-  clientPath: string
-  workerPath: string
+  readonly port?: number
+  readonly dataSource: DataSource
+  readonly clientPath: string
+  readonly workerPath: string
 }
 
 export class Server {
@@ -43,17 +43,64 @@ export class Server {
     })
 
     this.httpServer.register(fastifyCompress)
-    this.httpServer.register(fastifyStatic, {
-      root: path.resolve(process.cwd(), './dist'),
-      prefix: '/static',
-      setHeaders: (res: http.ServerResponse) => {
-        res.setHeader('Service-Worker-Allowed', '/')
-      }
+
+    let clientPath = opts.clientPath
+    let workerPath = opts.workerPath
+
+    if (path.extname(clientPath) === '') clientPath += '.js'
+    if (path.extname(workerPath) === '') workerPath += '.js'
+
+    if (!fs.statSync(clientPath).isFile()) {
+      throw new Error(`"${clientPath}" is not a file.`)
+    }
+
+    if (!fs.statSync(workerPath).isFile()) {
+      throw new Error(`"${workerPath}" is not a file.`)
+    }
+
+    // Check for source map
+    const clientSourceMapPath = `${clientPath}.map`
+    let foundClientSourceMap = false
+
+    const workerSourceMapPath = `${workerPath}.map`
+    let foundWorkerSourceMap = false
+
+    try {
+      foundClientSourceMap = fs.statSync(clientSourceMapPath).isFile()
+    } catch {}
+
+    try {
+      foundWorkerSourceMap = fs.statSync(workerSourceMapPath).isFile()
+    } catch {}
+
+    this.httpServer.get('/static/client.js', async (_req, res) => {
+      res.header('Content-Type', 'application/javascript; charset=utf-8')
+      return fs.createReadStream(clientPath)
     })
 
-    this.httpServer.get('/manifest.json', (_req, res) => {
+    this.httpServer.get('/static/worker.js', async (_req, res) => {
+      res.header('Content-Type', 'application/javascript; charset=utf-8')
+      res.header('Service-Worker-Allowed', '/')
+      return fs.createReadStream(workerPath)
+    })
+
+    if (foundClientSourceMap) {
+      this.httpServer.get('/static/client.js.map', async (_req, res) => {
+        res.header('Content-Type', 'application/json')
+        return fs.createReadStream(clientSourceMapPath)
+      })
+    }
+
+    if (foundWorkerSourceMap) {
+      this.httpServer.get('/static/worker.js.map', async (_req, res) => {
+        res.header('Content-Type', 'application/json')
+        return fs.createReadStream(workerSourceMapPath)
+      })
+    }
+
+    this.httpServer.get('/manifest.json', async (_req, _res) => {
       // TODO: Config
-      res.send({
+      return {
         short_name: 'Test',
         name: 'Test',
         icons: [
@@ -73,7 +120,7 @@ export class Server {
         display: 'standalone',
         scope: '/',
         theme_color: '#000000'
-      })
+      }
     })
 
     this.httpServer.get('/api/route/*', async (req, res) => {
@@ -121,7 +168,11 @@ export class Server {
     initializeCSSRules()
   }
 
-  private async getArticles(): Promise<Article[]> {
+  private async getArticle(id: string): Promise<Article> {
+    return this.opts.dataSource.getArticle(id)
+  }
+
+  private async getArticles(): Promise<ListArticle[]> {
     const today = new Date()
     const oneWeekAgo = new Date()
 
@@ -138,7 +189,7 @@ export class Server {
 
     switch (route.type) {
       case RouteType.Article:
-        return {...route, article: {} as any}
+        return {...route, article: await this.getArticle(route.articleID)}
 
       case RouteType.Front:
         return {

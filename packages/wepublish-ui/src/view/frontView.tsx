@@ -1,7 +1,6 @@
 import React from 'react'
 import {Block, CoreBlockType} from '@wepublish/common'
 import {ArticleBlock} from '../block/articleBlock'
-import {ContentWrapper} from '../components/contentWrapper'
 import {Inset, InsetContent} from '../components/inset'
 
 export interface FrontViewProps {
@@ -19,13 +18,11 @@ export function FrontView(props: FrontViewProps) {
   if (!props.blocks) return null
 
   return (
-    <ContentWrapper>
-      <InsetContent inset={frontViewInset}>
-        {props.blocks.map(block => (
-          <React.Fragment key={block.id}>{viewForBlock(block)}</React.Fragment>
-        ))}
-      </InsetContent>
-    </ContentWrapper>
+    <InsetContent inset={frontViewInset}>
+      {props.blocks.map(block => (
+        <React.Fragment key={block.id}>{viewForBlock(block)}</React.Fragment>
+      ))}
+    </InsetContent>
   )
 }
 
