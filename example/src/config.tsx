@@ -1,3 +1,6 @@
+import React from 'react'
+import {de} from 'date-fns/locale'
+
 export function BrandLogo() {
   return (
     <svg viewBox="0 0 164 45">
@@ -14,6 +17,13 @@ export const brandTheme = {
     color3: '#CCCCCC',
     color4: '#454545',
     color5: '#000000',
+    color6: '#000000',
     primaryTextColor: '#222222'
   }
+}
+
+export const configuration = {
+  locale: 'de',
+  dateLocale: de,
+  theme: brandTheme
 }

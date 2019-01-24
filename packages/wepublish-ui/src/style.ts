@@ -6,6 +6,7 @@ export function initializeCSSRules(target?: Element) {
 
   cssRule('html', {
     boxSizing: 'border-box',
+    fontFamily: 'sans-serif',
     fontSize: '62.5%'
   })
 

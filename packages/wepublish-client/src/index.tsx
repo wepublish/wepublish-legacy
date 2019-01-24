@@ -1,27 +1,29 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {unserializeRoute} from '@wepublish/common'
 
 import {
   ApplicationView,
   initializeCSSRules,
   ApplicationOptions
 } from '@wepublish/ui'
+
 import {version, moduleName} from './version'
 
 export interface ClientOptions extends ApplicationOptions {}
 
-export function mount(_opts: ClientOptions) {
+export function mount(opts: ClientOptions) {
   if (
     document.readyState == 'complete' ||
     document.readyState == 'interactive'
   ) {
-    initialize()
+    initialize(opts)
   } else {
-    addEventListener('DOMContentLoaded', () => initialize())
+    addEventListener('DOMContentLoaded', () => initialize(opts))
   }
 }
 
-function initialize() {
+async function initialize(opts: ClientOptions) {
   console.info(`Initializing ${moduleName} v${version}.`)
 
   if ('serviceWorker' in navigator) {
@@ -52,5 +54,12 @@ function initialize() {
   initializeCSSRules(styleElement)
 
   const initialState = JSON.parse(initialStateElement.textContent)
-  ReactDOM.hydrate(<ApplicationView {...initialState} />, applicationElement)
+  ReactDOM.hydrate(
+    <ApplicationView
+      initialRoute={unserializeRoute(initialState.initialRoute)}
+      locale={opts.locale}
+      dateLocale={opts.dateLocale}
+    />,
+    applicationElement
+  )
 }

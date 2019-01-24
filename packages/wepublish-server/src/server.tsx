@@ -38,6 +38,7 @@ export class Server {
 
   public constructor(opts: ServerOptions) {
     this.opts = opts
+
     this.httpServer = fastify({
       logger: {prettyPrint: process.env.NODE_ENV != 'production'}
     })
@@ -134,7 +135,14 @@ export class Server {
         initialRoute: route
       }
 
-      const component = <ApplicationView {...initialProps} theme={opts.theme} />
+      const component = (
+        <ApplicationView
+          {...initialProps}
+          locale={opts.locale}
+          dateLocale={opts.dateLocale}
+          theme={opts.theme}
+        />
+      )
       const componentString = ReactDOM.renderToString(component)
 
       const markup = ReactDOM.renderToStaticMarkup(
@@ -176,7 +184,7 @@ export class Server {
     const today = new Date()
     const oneWeekAgo = new Date()
 
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 14)
 
     return this.opts.dataSource.getArticles(today, oneWeekAgo)
   }
