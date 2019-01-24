@@ -1,5 +1,11 @@
 import React from 'react'
-import {RouteType, Route, reverseRoute, matchRoute} from '@wepublish/common'
+import {
+  RouteType,
+  Route,
+  reverseRoute,
+  matchRoute,
+  unserializeRoute
+} from '@wepublish/common'
 
 export type RouteContext = {
   route: Route
@@ -77,9 +83,9 @@ export class HistoryRouteContextProvider extends React.Component<
 
     const path = reverseRoute(route)
     const response = await fetch(`/api/route${path}`)
-    const route: Route = await response.json()
+    const newRoute = unserializeRoute(await response.json())
 
-    this.setState({route: await response.json()})
+    this.setState({route: newRoute})
   }
 
   public render(): React.ReactNode {

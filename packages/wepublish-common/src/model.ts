@@ -10,35 +10,44 @@ export interface Block<T = any> {
   data: T
 }
 
-export class Article {
-  constructor(
-    readonly id: string
-    readonly title: string
-    readonly description: string
-    readonly published: Date
-    readonly author: string
-    readonly image: string
-    readonly platform: string
-    readonly link: string
-    readonly content: Value
-  ) {}
+export type ModelData<T> = Pick<
+  T,
+  {[K in keyof T]: T[K] extends Function ? never : K}[keyof T]
+>
 
-  toJSON() {
-    return JSON.stringify(this)
+export class Article {
+  readonly id!: string
+  readonly title!: string
+  readonly description!: string
+  readonly published!: Date
+  readonly author!: string
+  readonly image!: string
+  readonly platform!: string
+  readonly link!: string
+  readonly content!: Value
+
+  constructor(init: ModelData<Article>) {
+    Object.assign(this, init)
   }
 
-  static fromJSON(json: ArticleJSON) {
-    return new ListArticle(
-      json.id,
-      json.title
-      json.description,
-      new Date(json.published),
-      json.author,
-      json.image,
-      json.platform,
-      json.link,
-      Value.fromJSON(json.content)
-    )
+  toJSON(): ArticleJSON {
+    return {
+      ...this,
+      published: this.published.toISOString(),
+      content: this.content.toJSON()
+    }
+  }
+
+  clone(override: Partial<ModelData<Article>>): Article {
+    return new Article({...this, ...override})
+  }
+
+  static fromJSON(json: ArticleJSON): Article {
+    return new Article({
+      ...json,
+      published: new Date(json.published),
+      content: Value.fromJSON(json.content)
+    })
   }
 }
 
@@ -55,32 +64,35 @@ export interface ArticleJSON {
 }
 
 export class ListArticle {
-  constructor(
-    readonly id: string
-    readonly title: string
-    readonly description: string
-    readonly published: Date
-    readonly author: string
-    readonly image: string
-    readonly platform: string
-    readonly link: string
-  ) {}
+  readonly id!: string
+  readonly title!: string
+  readonly description!: string
+  readonly published!: Date
+  readonly author!: string
+  readonly image!: string
+  readonly platform!: string
+  readonly link!: string
+
+  constructor(init: ModelData<ListArticle>) {
+    Object.assign(this, init)
+  }
 
   toJSON(): ListArticleJSON {
-    return JSON.stringify(this)
+    return {
+      ...this,
+      published: this.published.toISOString()
+    }
+  }
+
+  clone(override: Partial<ModelData<ListArticle>>): ListArticle {
+    return new ListArticle({...this, ...override})
   }
 
   static fromJSON(json: ListArticleJSON): ListArticle {
-    return new ListArticle(
-      json.id,
-      json.title
-      json.description,
-      new Date(json.published),
-      json.author,
-      json.image,
-      json.platform,
-      json.link
-    )
+    return new ListArticle({
+      ...json,
+      published: new Date(json.published)
+    })
   }
 }
 

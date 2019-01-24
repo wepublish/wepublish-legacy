@@ -16,11 +16,11 @@ export class WeightedAggregatorDataSource {
   }
 
   private prefixListArticleID(article: ListArticle, id: string): ListArticle {
-    return {...article, id: `${id}-${article.id}`}
+    return article.clone({id: `${id}-${article.id}`})
   }
 
   private prefixArticleID(article: Article, id: string): Article {
-    return {...article, id: `${id}-${article.id}`}
+    return article.clone({id: `${id}-${article.id}`})
   }
 
   public async getArticle(id: string): Promise<Article> {

@@ -73,3 +73,12 @@ export function reverseRoute(route: Route): string {
       return `/404`
   }
 }
+
+export function unserializeRoute(json: RouteJSON): Route {
+  switch (json.type) {
+    case RouteType.Article:
+      return {...json, article: Article.fromJSON(json.article)}
+  }
+
+  return {...json}
+}
