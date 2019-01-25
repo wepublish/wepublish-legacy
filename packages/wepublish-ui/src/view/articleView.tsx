@@ -15,6 +15,7 @@ export function ArticleView(props: ArticleViewProps) {
 
   const style = useThemeStyle(theme => [
     {
+      $debugName: ArticleView.name,
       padding: `${rem(2.1)} ${rem(2.3)}`,
       backgroundColor: theme.colors.color1,
       // maxWidth: rem(136.5),

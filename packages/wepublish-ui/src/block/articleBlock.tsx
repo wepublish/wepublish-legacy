@@ -10,6 +10,7 @@ export interface ArticleBlockProps {
 export function ArticleBlock(props: ArticleBlockProps) {
   const className = useThemeStyle(theme => [
     {
+      $debugName: ArticleBlock.name,
       backgroundColor: theme.colors.color3
     }
   ])

@@ -17,6 +17,9 @@ function viewForRoute(route: Route): ReactElement<any> | null {
 
     case RouteType.Article:
       return <ArticleView article={route.article} />
+
+    case RouteType.InternalServerError:
+      return <div>500 Internal Server Error!</div>
   }
 
   return <div>404 Not Found!</div>

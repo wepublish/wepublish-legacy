@@ -1,6 +1,8 @@
 .DS_Store
 .idea/
 dist/
+dist-server/
+dist-client/
 lib/
 node_modules
 npm-debug.log

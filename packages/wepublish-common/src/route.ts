@@ -4,6 +4,7 @@ import {Block, Article, ArticleJSON} from './model'
 
 export enum RouteType {
   NotFound = 'notFound',
+  InternalServerError = 'internalServerError',
   Front = 'front',
   Article = 'article'
 }
@@ -23,6 +24,10 @@ export interface NotFoundRoute {
   type: RouteType.NotFound
 }
 
+export interface InternalServerErrorRoute {
+  type: RouteType.InternalServerError
+}
+
 export interface FrontRouteJSON {
   type: RouteType.Front
   blocks?: Block[]
@@ -34,8 +39,17 @@ export interface ArticleRouteJSON {
   article: ArticleJSON
 }
 
-export type Route = FrontRoute | ArticleRoute | NotFoundRoute
-export type RouteJSON = FrontRouteJSON | ArticleRouteJSON | NotFoundRoute
+export type Route =
+  | FrontRoute
+  | ArticleRoute
+  | NotFoundRoute
+  | InternalServerErrorRoute
+
+export type RouteJSON =
+  | FrontRouteJSON
+  | ArticleRouteJSON
+  | NotFoundRoute
+  | InternalServerErrorRoute
 
 const router = new Trie()
 const articleNode = router.define('/article/:id')
@@ -71,6 +85,9 @@ export function reverseRoute(route: Route): string {
 
     case RouteType.NotFound:
       return `/404`
+
+    case RouteType.InternalServerError:
+      return '/500'
   }
 }
 

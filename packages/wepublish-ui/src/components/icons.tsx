@@ -4,6 +4,7 @@ import {useThemeStyle} from '../context/themeContext'
 export function NavigationIcon() {
   const className = useThemeStyle(theme => [
     {
+      $debugName: NavigationIcon.name,
       height: '1em',
       position: 'absolute',
       fill: theme.colors.primaryTextColor

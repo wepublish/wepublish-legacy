@@ -1,12 +1,12 @@
-require('dotenv-safe').config()
+import 'dotenv-safe/config'
 
 import * as wepublish from '@wepublish/server'
 import {configuration} from './config'
 
 wepublish.startServer({
   ...configuration,
-  clientPath: './client',
-  workerPath: './worker',
+  clientPath: './dist/client',
+  workerPath: './dist/worker',
   dataSource: new wepublish.WeightedAggregatorDataSource(
     {
       id: 'test',

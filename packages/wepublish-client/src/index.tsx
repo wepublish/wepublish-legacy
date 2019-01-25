@@ -59,6 +59,7 @@ async function initialize(opts: ClientOptions) {
       initialRoute={unserializeRoute(initialState.initialRoute)}
       locale={opts.locale}
       dateLocale={opts.dateLocale}
+      theme={opts.theme}
     />,
     applicationElement
   )

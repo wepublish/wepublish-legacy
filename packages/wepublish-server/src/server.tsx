@@ -125,15 +125,66 @@ export class Server {
     })
 
     this.httpServer.get('/api/route/*', async (req, res) => {
-      res.send(await this.getRouteWithData(req.params['*'], req.query))
+      try {
+        return await this.getRouteWithData(req.params['*'], req.query)
+      } catch (err) {
+        this.httpServer.log.error(err)
+        res.status(500)
+        return {type: RouteType.InternalServerError}
+      }
     })
 
     this.httpServer.get('*', async (req, res) => {
       const route = await this.getRouteWithData(req.params['*'], req.query)
 
-      const initialProps = {
-        initialRoute: route
+      switch (route.type) {
+        case RouteType.NotFound:
+          res.status(404)
       }
+
+      const initialProps = {initialRoute: route}
+
+      const component = (
+        <ApplicationView
+          {...initialProps}
+          locale={opts.locale}
+          dateLocale={opts.dateLocale}
+          theme={opts.theme}
+        />
+      )
+
+      const componentString = ReactDOM.renderToString(component)
+      const markup = ReactDOM.renderToStaticMarkup(
+        <html lang={opts.locale}>
+          <head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
+            <link rel="manifest" href="/manifest.json" />
+            <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
+            <script defer src="/static/client.js" />
+            <script
+              id="initialState"
+              type="application/json"
+              dangerouslySetInnerHTML={{__html: JSON.stringify(initialProps)}}
+            />
+          </head>
+          <body>
+            <div
+              id="application"
+              dangerouslySetInnerHTML={{__html: componentString}}
+            />
+          </body>
+        </html>
+      )
+
+      res.type('text/html; charset=utf-8').send(`<!doctype html>${markup}`)
+    })
+
+    this.httpServer.setErrorHandler((_err, _req, res) => {
+      const route: Route = {type: RouteType.InternalServerError}
+      const initialProps = {initialRoute: route}
 
       const component = (
         <ApplicationView
@@ -145,12 +196,13 @@ export class Server {
       )
       const componentString = ReactDOM.renderToString(component)
 
+      // TODO: Deduplicate
       const markup = ReactDOM.renderToStaticMarkup(
-        <html>
+        <html lang={opts.locale}>
           <head>
             <meta
               name="viewport"
-              content="width=device-width, initial-scale=1, user-scalable=no"
+              content="width=device-width, initial-scale=1"
             />
             <link rel="manifest" href="/manifest.json" />
             <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
