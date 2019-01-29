@@ -1,4 +1,5 @@
 import {Value, ValueJSON} from 'slate'
+import {slugify} from './utility'
 
 export enum CoreBlockType {
   Article = 'article'
@@ -28,6 +29,10 @@ export class Article {
 
   constructor(init: ModelData<Article>) {
     Object.assign(this, init)
+  }
+
+  getTitleSlug(): string {
+    return slugify(this.title)
   }
 
   toJSON(): ArticleJSON {
@@ -75,6 +80,10 @@ export class ListArticle {
 
   constructor(init: ModelData<ListArticle>) {
     Object.assign(this, init)
+  }
+
+  getTitleSlug(): string {
+    return slugify(this.title)
   }
 
   toJSON(): ListArticleJSON {

@@ -4,6 +4,7 @@ import {RouteContext} from '../context/routeContext'
 
 export interface LinkProps {
   route: Route
+  className?: string
   children?: ReactNode
 }
 
@@ -12,6 +13,7 @@ export function Link(props: LinkProps) {
 
   return (
     <a
+      className={props.className}
       href={reverseRoute(props.route)}
       onClick={e => {
         e.preventDefault()

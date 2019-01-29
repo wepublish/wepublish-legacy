@@ -12,7 +12,7 @@ export function initializeCSSRules(target?: Element) {
 
   cssRule('html', {
     boxSizing: 'border-box',
-    fontFamily: 'sans-serif',
+    fontFamily: 'Montserrat, sans-serif',
     fontSize: '62.5%'
   })
 
@@ -34,7 +34,8 @@ export function initializeCSSRules(target?: Element) {
 
 export const breakpoint = {
   mobile: px(0),
-  desktop: px(720)
+  tablet: px(720),
+  desktop: px(1000)
 }
 
 export const zIndex = {
@@ -43,9 +44,14 @@ export const zIndex = {
 }
 
 export function debugName(
-  component: React.FunctionComponent<any>
+  component: React.FunctionComponent<any>,
+  suffix?: string
 ): string | undefined {
   if (process.env.NODE_ENV !== 'production') {
+    if (suffix) {
+      return `${component.displayName || component.name}_${suffix}`
+    }
+
     return component.displayName || component.name
   }
 

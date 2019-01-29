@@ -162,6 +162,10 @@ export class Server {
               content="width=device-width, initial-scale=1"
             />
             <link rel="manifest" href="/manifest.json" />
+            <link
+              href="https://fonts.googleapis.com/css?family=Montserrat"
+              rel="stylesheet"
+            />
             <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
             <script defer src="/static/client.js" />
             <script
@@ -205,6 +209,10 @@ export class Server {
               content="width=device-width, initial-scale=1"
             />
             <link rel="manifest" href="/manifest.json" />
+            <link
+              href="https://fonts.googleapis.com/css?family=Montserrat"
+              rel="stylesheet"
+            />
             <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
             <script defer src="/static/client.js" />
             <script

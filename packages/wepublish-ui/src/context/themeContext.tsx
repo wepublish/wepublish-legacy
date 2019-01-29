@@ -1,5 +1,6 @@
-import React, {useContext, useMemo} from 'react'
+import React, {useContext, useMemo, InputIdentityList} from 'react'
 import {style, types} from 'typestyle'
+import {rgba} from 'csx'
 
 export interface LogoProps {
   className: string
@@ -15,6 +16,7 @@ export interface Theme {
     color5: string
     color6: string
     primaryTextColor: string
+    shadowColor: string
   }
 }
 
@@ -37,7 +39,8 @@ export const defaultTheme: Theme = {
     color4: '#ECECEC',
     color5: '#454545',
     color6: '#000000',
-    primaryTextColor: '#222222'
+    primaryTextColor: '#222222',
+    shadowColor: rgba(170, 170, 170, 0.3).toString()
   }
 }
 
@@ -73,17 +76,26 @@ export type StyleProps = (
   | null
   | undefined)[]
 
-export function useThemeStyle(styleFn: (theme: Theme) => StyleProps) {
-  return useTheme(themeContext => style(...styleFn(themeContext)))
+export function useThemeStyle(
+  styleFn: (theme: Theme) => StyleProps,
+  inputs: InputIdentityList = []
+) {
+  return useTheme(themeContext => style(...styleFn(themeContext)), inputs)
 }
 
-export function useStyle(styleFn: () => StyleProps) {
-  return useMemo(() => style(...styleFn()), [])
+export function useStyle(
+  styleFn: () => StyleProps,
+  inputs: InputIdentityList = []
+) {
+  return useMemo(() => style(...styleFn()), inputs)
 }
 
-export function useTheme<T>(fn: (theme: Theme) => T) {
+export function useTheme<T>(
+  fn: (theme: Theme) => T,
+  inputs: InputIdentityList = []
+) {
   const themeContext = useContext(ThemeContext)
-  const object = useMemo(() => fn(themeContext), [themeContext])
+  const object = useMemo(() => fn(themeContext), [themeContext, ...inputs])
 
   return object
 }

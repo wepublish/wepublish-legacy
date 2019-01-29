@@ -26,7 +26,6 @@ export class WeightedAggregatorDataSource {
   public async getArticle(id: string): Promise<Article> {
     const dataSourceID = id.split('-')[0]
     const articleID = id.substr(dataSourceID.length + 1)
-
     const dataSource = this.dataSources.find(
       dataSource => dataSource.id == dataSourceID
     )

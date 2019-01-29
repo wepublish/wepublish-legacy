@@ -1,6 +1,6 @@
 import {Trie} from 'route-trie'
 import * as qs from 'query-string'
-import {Block, Article, ArticleJSON} from './model'
+import {Block, Article, ArticleJSON, ListArticle} from './model'
 
 export enum RouteType {
   NotFound = 'notFound',
@@ -16,6 +16,7 @@ export interface FrontRoute {
 
 export interface ArticleRoute {
   type: RouteType.Article
+  titleSlug: string
   articleID: string
   article?: Article
 }
@@ -35,6 +36,7 @@ export interface FrontRouteJSON {
 
 export interface ArticleRouteJSON {
   type: RouteType.Article
+  titleSlug: string
   articleID: string
   article: ArticleJSON
 }
@@ -52,7 +54,7 @@ export type RouteJSON =
   | InternalServerErrorRoute
 
 const router = new Trie()
-const articleNode = router.define('/article/:id')
+const articleNode = router.define('/article/:slug/:id')
 const frontNode = router.define('/')
 
 export function matchRoute(
@@ -66,7 +68,11 @@ export function matchRoute(
 
   switch (match.node) {
     case articleNode:
-      return {type: RouteType.Article, articleID: match.params.id}
+      return {
+        type: RouteType.Article,
+        titleSlug: match.params.slug,
+        articleID: match.params.id
+      }
 
     case frontNode:
       return {type: RouteType.Front}
@@ -78,7 +84,7 @@ export function matchRoute(
 export function reverseRoute(route: Route): string {
   switch (route.type) {
     case RouteType.Article:
-      return `/article/${route.articleID}`
+      return `/article/${route.titleSlug}/${route.articleID}`
 
     case RouteType.Front:
       return `/`
@@ -95,6 +101,17 @@ export function unserializeRoute(json: RouteJSON): Route {
   switch (json.type) {
     case RouteType.Article:
       return {...json, article: Article.fromJSON(json.article)}
+
+    case RouteType.Front:
+      return {
+        ...json,
+        blocks:
+          json.blocks &&
+          json.blocks.map(block => ({
+            ...block,
+            data: ListArticle.fromJSON(block.data) // TODO: Block serialization
+          }))
+      }
   }
 
   return {...json}

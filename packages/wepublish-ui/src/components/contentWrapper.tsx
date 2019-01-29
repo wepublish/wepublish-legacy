@@ -49,7 +49,7 @@ export function ContentWrapper(props: ContentWrapperProps) {
       }
     },
     media(
-      {minWidth: breakpoint.desktop},
+      {minWidth: breakpoint.tablet},
       {
         flexDirection: 'row',
 

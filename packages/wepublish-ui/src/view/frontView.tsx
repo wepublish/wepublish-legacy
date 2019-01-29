@@ -16,27 +16,36 @@ export function FrontView(props: FrontViewProps) {
   const className = useThemeStyle(theme => [
     {
       $debugName: debugName(FrontView),
+
       width: percent(100),
-      padding: `${rem(2.1)} ${rem(2.3)}`,
-      backgroundColor: theme.colors.color1,
-      maxWidth: rem(128),
-      margin: '0 auto'
+      backgroundColor: theme.colors.color2,
+
+      $nest: {
+        '> .content': {
+          width: percent(100),
+          maxWidth: rem(128),
+          padding: `${rem(2.1)} ${rem(2.3)}`,
+          margin: '0 auto'
+        }
+      }
     }
   ])
 
   return (
     <div className={className}>
-      <Grid
-        columns={1}
-        spacingVertical={2}
-        spacingHorizontal={2}
-        breakpoints={{[breakpoint.desktop]: 3}}>
-        <GridRow>
-          {props.blocks.map(block => (
-            <GridItem key={block.id}>{viewForBlock(block)}</GridItem>
-          ))}
-        </GridRow>
-      </Grid>
+      <div className="content">
+        <Grid
+          columns={1}
+          spacingVertical={2}
+          spacingHorizontal={2}
+          breakpoints={{[breakpoint.tablet]: 3}}>
+          <GridRow>
+            {props.blocks.map(block => (
+              <GridItem key={block.id}>{viewForBlock(block)}</GridItem>
+            ))}
+          </GridRow>
+        </Grid>
+      </div>
     </div>
   )
 }

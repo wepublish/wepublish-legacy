@@ -1,6 +1,7 @@
 import React from 'react'
 import {de} from 'date-fns/locale'
 import {LogoProps} from '@wepublish/ui'
+import {rgba} from 'csx'
 
 export function BrandLogo(props: LogoProps) {
   return (
@@ -19,7 +20,8 @@ export const brandTheme = {
     color4: '#ECECEC',
     color5: '#454545',
     color6: '#000000',
-    primaryTextColor: '#222222'
+    primaryTextColor: '#222222',
+    shadowColor: rgba(170, 170, 170, 0.3).toString()
   }
 }
 
