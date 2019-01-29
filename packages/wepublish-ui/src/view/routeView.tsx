@@ -4,6 +4,8 @@ import {RouteContext} from '../context/routeContext'
 import {FrontView} from './frontView'
 import {ContentWrapper} from '../components/contentWrapper'
 import {ArticleView} from './articleView'
+import {NotFoundView} from './notFoundView'
+import {InternalServerErrorView} from './internalServerErrorView'
 
 export function RouteView() {
   const routeContext = useContext(RouteContext)
@@ -19,8 +21,8 @@ function viewForRoute(route: Route): ReactElement<any> | null {
       return <ArticleView article={route.article} />
 
     case RouteType.InternalServerError:
-      return <div>500 Internal Server Error!</div>
+      return <InternalServerErrorView />
   }
 
-  return <div>404 Not Found!</div>
+  return <NotFoundView />
 }

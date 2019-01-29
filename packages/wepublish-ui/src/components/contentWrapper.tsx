@@ -4,6 +4,7 @@ import {useThemeStyle, useTheme} from '../context/themeContext'
 import {NavigationIcon} from './icons'
 import {media} from 'typestyle'
 import {em, percent, rem, viewHeight, px} from 'csx'
+import {breakpoint, debugName, zIndex} from '../style'
 
 export interface ContentWrapperProps {
   children: ReactNode
@@ -12,11 +13,12 @@ export interface ContentWrapperProps {
 export function ContentWrapper(props: ContentWrapperProps) {
   const className = useThemeStyle(theme => [
     {
-      $debugName: 'ContentWrapper',
+      $debugName: debugName(ContentWrapper),
 
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
+      minHeight: viewHeight(100),
 
       $nest: {
         '> .navigationBar': {
@@ -24,6 +26,7 @@ export function ContentWrapper(props: ContentWrapperProps) {
           flexDirection: 'row',
           alignItems: 'center',
           position: 'sticky',
+          zIndex: zIndex.navigation,
           top: 0,
           backgroundColor: theme.colors.color1,
           borderBottom: `${px(1)} solid ${theme.colors.color4}`,
@@ -39,12 +42,14 @@ export function ContentWrapper(props: ContentWrapperProps) {
         },
 
         '> .content': {
+          display: 'flex',
+          flexGrow: 1,
           width: percent(100)
         }
       }
     },
     media(
-      {minWidth: 720},
+      {minWidth: breakpoint.desktop},
       {
         flexDirection: 'row',
 

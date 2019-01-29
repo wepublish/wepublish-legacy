@@ -1,5 +1,11 @@
 import {cssRule, setStylesTarget} from 'typestyle'
-import {rem} from 'csx'
+import {rem, px} from 'csx'
+
+declare var process: {
+  env: {
+    NODE_ENV: string
+  }
+}
 
 export function initializeCSSRules(target?: Element) {
   if (target) setStylesTarget(target)
@@ -24,4 +30,24 @@ export function initializeCSSRules(target?: Element) {
   cssRule('*, *:before, *:after ', {
     boxSizing: 'inherit'
   })
+}
+
+export const breakpoint = {
+  mobile: px(0),
+  desktop: px(720)
+}
+
+export const zIndex = {
+  content: 0,
+  navigation: 10
+}
+
+export function debugName(
+  component: React.FunctionComponent<any>
+): string | undefined {
+  if (process.env.NODE_ENV !== 'production') {
+    return component.displayName || component.name
+  }
+
+  return undefined
 }

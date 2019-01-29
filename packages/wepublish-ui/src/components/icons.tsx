@@ -1,10 +1,11 @@
 import React from 'react'
 import {useThemeStyle} from '../context/themeContext'
+import {debugName} from '../style'
 
 export function NavigationIcon() {
   const className = useThemeStyle(theme => [
     {
-      $debugName: NavigationIcon.name,
+      $debugName: debugName(NavigationIcon),
       height: '1em',
       position: 'absolute',
       fill: theme.colors.primaryTextColor

@@ -1,35 +1,36 @@
 import React, {ReactNode, useContext} from 'react'
-import {style} from 'typestyle'
+import {style, media} from 'typestyle'
 import {rem, percent} from 'csx'
+import {debugName} from '../style'
 
 export interface GridItemProps {
   children?: ReactNode
 }
 
-export function GridItem(_props: GridItemProps) {
+export function GridItem(props: GridItemProps) {
   const gridContext = useContext(GridContext)
 
-  const className = style({
-    $debugName: GridItem.name,
-    flexBasis: percent((1 / gridContext.columns) * 100),
-    padding: `${rem(gridContext.spacingVertical / 2)} ${rem(
-      gridContext.spacingHorizontal / 2
-    )}`,
-
-    $nest: {
-      '> .test': {
-        width: '100%',
-        height: '30px',
-        backgroundColor: 'red'
+  const breakpointCSS = Object.keys(gridContext.breakpoints).map(key =>
+    media(
+      {minWidth: key},
+      {
+        flexBasis: percent((1 / gridContext.breakpoints[key]) * 100)
       }
-    }
-  })
-
-  return (
-    <div className={className}>
-      <div className="test" />
-    </div>
+    )
   )
+
+  const className = style(
+    {
+      $debugName: debugName(GridItem),
+      flexBasis: percent((1 / gridContext.columns) * 100),
+      padding: `${rem(gridContext.spacingVertical / 2)} ${rem(
+        gridContext.spacingHorizontal / 2
+      )}`
+    },
+    ...breakpointCSS
+  )
+
+  return <div className={className}>{props.children}</div>
 }
 
 export interface GridRowProps {
@@ -38,7 +39,7 @@ export interface GridRowProps {
 
 export function GridRow(props: GridRowProps) {
   const className = style({
-    $debugName: GridRow.name,
+    $debugName: debugName(GridRow),
     display: 'flex',
     flexWrap: 'wrap'
   })
@@ -50,12 +51,18 @@ export interface GridContext {
   columns: number
   spacingHorizontal: number
   spacingVertical: number
+  breakpoints: {[size: string]: number}
+}
+
+export interface GridBreakpoint {
+  columns: string
 }
 
 export const GridContext = React.createContext<GridContext>({
   columns: 0,
   spacingHorizontal: 0,
-  spacingVertical: 0
+  spacingVertical: 0,
+  breakpoints: {}
 })
 
 export interface GridProps extends GridContext {
@@ -64,7 +71,7 @@ export interface GridProps extends GridContext {
 
 export function Grid(props: GridProps) {
   const className = style({
-    $debugName: Grid.name,
+    $debugName: debugName(Grid),
     margin: `0 ${rem(-props.spacingHorizontal / 2)}`
   })
 

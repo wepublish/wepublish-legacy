@@ -5,6 +5,7 @@ import {formatRelative} from 'date-fns'
 
 import {useThemeStyle} from '../context/themeContext'
 import {LocaleContext} from '../context/localeContext'
+import {debugName} from '../style'
 
 export interface ArticleViewProps {
   article?: Article
@@ -15,7 +16,7 @@ export function ArticleView(props: ArticleViewProps) {
 
   const style = useThemeStyle(theme => [
     {
-      $debugName: ArticleView.name,
+      $debugName: debugName(ArticleView),
       padding: `${rem(2.1)} ${rem(2.3)}`,
       backgroundColor: theme.colors.color1,
       // maxWidth: rem(136.5),

@@ -1,9 +1,10 @@
 import React from 'react'
-import {rem} from 'csx'
+import {rem, percent} from 'csx'
 import {Block, CoreBlockType} from '@wepublish/common'
 import {ArticleBlock} from '../block/articleBlock'
 import {Grid, GridRow, GridItem} from '../components/grid'
 import {useThemeStyle} from '../context/themeContext'
+import {breakpoint, debugName} from '../style'
 
 export interface FrontViewProps {
   blocks?: Block[]
@@ -14,7 +15,8 @@ export function FrontView(props: FrontViewProps) {
 
   const className = useThemeStyle(theme => [
     {
-      $debugName: FrontView.name,
+      $debugName: debugName(FrontView),
+      width: percent(100),
       padding: `${rem(2.1)} ${rem(2.3)}`,
       backgroundColor: theme.colors.color1,
       maxWidth: rem(128),
@@ -24,27 +26,17 @@ export function FrontView(props: FrontViewProps) {
 
   return (
     <div className={className}>
-      <Grid columns={3} spacingVertical={2} spacingHorizontal={2}>
+      <Grid
+        columns={1}
+        spacingVertical={2}
+        spacingHorizontal={2}
+        breakpoints={{[breakpoint.desktop]: 3}}>
         <GridRow>
-          <GridItem />
-          <GridItem />
-          <GridItem />
-        </GridRow>
-        <GridRow>
-          <GridItem />
-          <GridItem />
-          <GridItem />
-        </GridRow>
-        <GridRow>
-          <GridItem />
-          <GridItem />
-          <GridItem />
+          {props.blocks.map(block => (
+            <GridItem key={block.id}>{viewForBlock(block)}</GridItem>
+          ))}
         </GridRow>
       </Grid>
-
-      {props.blocks.map(block => (
-        <React.Fragment key={block.id}>{viewForBlock(block)}</React.Fragment>
-      ))}
     </div>
   )
 }
