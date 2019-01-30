@@ -9,22 +9,22 @@ wepublish.startServer({
   workerPath: './dist/worker',
   dataSource: new wepublish.WeightedAggregatorDataSource(
     {
-      id: 'test',
+      id: 'a',
       dataSource: new wepublish.KarmaDataSource(
-        process.env.KARMA_URL!,
-        process.env.KARMA_USERNAME!,
-        process.env.KARMA_PASSWORD!
+        process.env.KARMA_URL_A!,
+        process.env.KARMA_USERNAME_A!,
+        process.env.KARMA_PASSWORD_A!
       ),
       weight: 1
     },
     {
-      id: 'test2',
+      id: 'b',
       dataSource: new wepublish.KarmaDataSource(
-        process.env.KARMA_URL!,
-        process.env.KARMA_USERNAME!,
-        process.env.KARMA_PASSWORD!
+        process.env.KARMA_URL_B!,
+        process.env.KARMA_USERNAME_B!,
+        process.env.KARMA_PASSWORD_B!
       ),
-      weight: 0.1
+      weight: 0.5
     }
   )
 })

@@ -6,6 +6,7 @@ import {ContentWrapper} from '../components/contentWrapper'
 import {ArticleView} from './articleView'
 import {NotFoundView} from './notFoundView'
 import {InternalServerErrorView} from './internalServerErrorView'
+import {CommentView} from './commentView'
 
 export function RouteView() {
   const routeContext = useContext(RouteContext)
@@ -19,6 +20,9 @@ function viewForRoute(route: Route): ReactElement<any> | null {
 
     case RouteType.Article:
       return <ArticleView article={route.article} />
+
+    case RouteType.Comment:
+      return <CommentView articleID={route.articleID} />
 
     case RouteType.InternalServerError:
       return <InternalServerErrorView />

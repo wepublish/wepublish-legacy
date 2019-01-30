@@ -10,7 +10,10 @@ export enum WepublishTags {
 }
 
 export interface KarmaListArticle {
-  metadata: {
+  id: [string, string]
+  model: [string, string]
+  updated: string
+  value: {
     author: string
     description: string
     id: string
@@ -23,17 +26,22 @@ export interface KarmaListArticle {
 }
 
 export interface KarmaArticle {
-  metadata: {
-    author: string
-    description: string
-    id: string
-    image: string
-    link: string
-    platform: string
-    published: string
-    title: string
+  id: [string, string]
+  model: [string, string]
+  updated: string
+  value: {
+    metadata: {
+      author: string
+      description: string
+      id: string
+      image: string
+      link: string
+      platform: string
+      published: string
+      title: string
+    }
+    article: ValueJSON
   }
-  article: ValueJSON
 }
 
 export class KarmaDataSource implements DataSource {
@@ -57,16 +65,16 @@ export class KarmaDataSource implements DataSource {
   }
 
   private transformListArticle(article: KarmaListArticle): ListArticle {
-    return ListArticle.fromJSON(article.metadata)
+    return ListArticle.fromJSON({...article.value, id: article.id[1]})
   }
 
   private transformArticle(article: KarmaArticle): Article {
     return Article.fromJSON({
-      ...article.metadata,
+      ...article.value.metadata,
       content: {
         // TEMP: Fix document JSON format
         document: {
-          nodes: article.article.document as any,
+          nodes: article.value.article.document as any,
           object: 'document'
         },
         object: 'value'
@@ -78,16 +86,9 @@ export class KarmaDataSource implements DataSource {
     const session = await this.getSession()
 
     try {
+      const model = await session.do(xpr.tag(WepublishTags.Article))
       const article: KarmaArticle = await session.do(
-        xpr
-          .all(xpr.tag(WepublishTags.Article))
-          .filterList((_index, value) =>
-            value
-              .field('metadata')
-              .field('id')
-              .equal(xpr.string(id))
-          )
-          .first()
+        xpr.get(xpr.data(d => d.ref(model[1], id))).metarialize()
       )
       return this.transformArticle(article)
     } catch (err) {
@@ -117,9 +118,10 @@ export class KarmaDataSource implements DataSource {
               )
           )
           .mapList((_index, value) =>
-            value.setField('article', xpr.data(d => d.null()))
+            value.metarialize().setField('value', value.field('metadata'))
           )
       )
+
       return articles.map(article => this.transformListArticle(article))
     } catch (err) {
       // TODO: Check session expiration and refetch

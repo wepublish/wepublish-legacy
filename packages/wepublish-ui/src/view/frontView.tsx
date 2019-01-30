@@ -2,6 +2,7 @@ import React from 'react'
 import {rem, percent} from 'csx'
 import {Block, CoreBlockType} from '@wepublish/common'
 import {ArticleBlock} from '../block/articleBlock'
+import {BrandBlock} from '../block/brandBlock'
 import {Grid, GridRow, GridItem} from '../components/grid'
 import {useThemeStyle} from '../context/themeContext'
 import {breakpoint, debugName} from '../style'
@@ -40,6 +41,9 @@ export function FrontView(props: FrontViewProps) {
           spacingHorizontal={2}
           breakpoints={{[breakpoint.tablet]: 3}}>
           <GridRow>
+            <GridItem>
+              <BrandBlock />
+            </GridItem>
             {props.blocks.map(block => (
               <GridItem key={block.id}>{viewForBlock(block)}</GridItem>
             ))}

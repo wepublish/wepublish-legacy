@@ -1,11 +1,13 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {url, percent, rem, em, linearGradient, color, px} from 'csx'
 import {media} from 'typestyle'
+import {formatDistanceStrict} from 'date-fns'
 import {Article, RouteType} from '@wepublish/common'
 import {Link} from '../components/link'
 import {useThemeStyle, useStyle} from '../context/themeContext'
 import {debugName, breakpoint} from '../style'
 import {AspectRatio} from '../components/aspectRatio'
+import {LocaleContext} from '../context/localeContext'
 
 export interface ArticleBlockProps {
   article: Article
@@ -93,9 +95,25 @@ export function ArticleBlock(props: ArticleBlockProps) {
   const footerClassName = useThemeStyle(_theme => [
     {
       $debugName: debugName(ArticleBlock, 'footer'),
-      padding: em(0.5)
+      flexShrink: 0,
+      padding: em(1.4 / 2.5)
     }
   ])
+
+  const timeClassName = useThemeStyle(theme => [
+    {
+      $debugName: debugName(ArticleBlock, 'time'),
+      display: 'inline-block',
+      float: 'right',
+      border: `${px(1)} solid ${theme.colors.color5}`,
+      borderRadius: em(0.3),
+      padding: `${em(0.5)} ${em(0.5)}`,
+      fontSize: em(0.5),
+      color: theme.colors.primaryTextColor
+    }
+  ])
+
+  const localeContext = useContext(LocaleContext)
 
   return (
     <Link
@@ -116,7 +134,15 @@ export function ArticleBlock(props: ArticleBlockProps) {
               </div>
             </AspectRatio>
             <div className={contentClassName}>{props.article.title}</div>
-            <div className={footerClassName} />
+            <div className={footerClassName}>
+              <time
+                className={timeClassName}
+                dateTime={props.article.published.toISOString()}>
+                {formatDistanceStrict(props.article.published, new Date(), {
+                  locale: localeContext.dateLocale
+                })}
+              </time>
+            </div>
           </div>
         </AspectRatio>
       </article>

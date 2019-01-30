@@ -57,6 +57,8 @@ async function initialize(opts: ClientOptions) {
   ReactDOM.hydrate(
     <ApplicationView
       initialRoute={unserializeRoute(initialState.initialRoute)}
+      siteName={opts.siteName}
+      talkURL={opts.talkURL}
       locale={opts.locale}
       dateLocale={opts.dateLocale}
       theme={opts.theme}

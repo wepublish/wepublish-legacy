@@ -4,7 +4,7 @@ import fs from 'fs'
 import fastify from 'fastify'
 import fastifyCompress from 'fastify-compress'
 
-import React from 'react'
+import React, {ReactNode} from 'react'
 import ReactDOM from 'react-dom/server'
 import {getStyles} from 'typestyle'
 
@@ -20,7 +20,8 @@ import {
   ListArticle,
   RouteType,
   matchRoute,
-  Route
+  Route,
+  titleForRoute
 } from '@wepublish/common'
 
 import {DataSource} from './dataSource/interface'
@@ -142,98 +143,98 @@ export class Server {
           res.status(404)
       }
 
-      const initialProps = {initialRoute: route}
-
       const component = (
         <ApplicationView
-          {...initialProps}
+          initialRoute={route}
+          siteName={opts.siteName}
+          talkURL={opts.talkURL}
           locale={opts.locale}
           dateLocale={opts.dateLocale}
           theme={opts.theme}
         />
       )
 
-      const componentString = ReactDOM.renderToString(component)
-      const markup = ReactDOM.renderToStaticMarkup(
-        <html lang={opts.locale}>
-          <head>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1"
-            />
-            <link rel="manifest" href="/manifest.json" />
-            <link
-              href="https://fonts.googleapis.com/css?family=Montserrat"
-              rel="stylesheet"
-            />
-            <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
-            <script defer src="/static/client.js" />
-            <script
-              id="initialState"
-              type="application/json"
-              dangerouslySetInnerHTML={{__html: JSON.stringify(initialProps)}}
-            />
-          </head>
-          <body>
-            <div
-              id="application"
-              dangerouslySetInnerHTML={{__html: componentString}}
-            />
-          </body>
-        </html>
-      )
-
-      res.type('text/html; charset=utf-8').send(`<!doctype html>${markup}`)
+      res
+        .type('text/html; charset=utf-8')
+        .send(this.wrapMarkup(component, route))
     })
 
     this.httpServer.setErrorHandler((_err, _req, res) => {
       const route: Route = {type: RouteType.InternalServerError}
-      const initialProps = {initialRoute: route}
-
       const component = (
         <ApplicationView
-          {...initialProps}
+          initialRoute={route}
+          siteName={opts.siteName}
+          talkURL={opts.talkURL}
           locale={opts.locale}
           dateLocale={opts.dateLocale}
           theme={opts.theme}
         />
       )
-      const componentString = ReactDOM.renderToString(component)
 
-      // TODO: Deduplicate
-      const markup = ReactDOM.renderToStaticMarkup(
-        <html lang={opts.locale}>
-          <head>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1"
-            />
-            <link rel="manifest" href="/manifest.json" />
-            <link
-              href="https://fonts.googleapis.com/css?family=Montserrat"
-              rel="stylesheet"
-            />
-            <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
-            <script defer src="/static/client.js" />
-            <script
-              id="initialState"
-              type="application/json"
-              dangerouslySetInnerHTML={{__html: JSON.stringify(initialProps)}}
-            />
-          </head>
-          <body>
-            <div
-              id="application"
-              dangerouslySetInnerHTML={{__html: componentString}}
-            />
-          </body>
-        </html>
-      )
-
-      res.type('text/html; charset=utf-8').send(`<!doctype html>${markup}`)
+      res
+        .type('text/html; charset=utf-8')
+        .send(this.wrapMarkup(component, route))
     })
 
     initializeCSSRules()
+  }
+
+  private wrapMarkup(component: JSX.Element, route: Route): string {
+    const componentString = ReactDOM.renderToString(component)
+
+    const markup = ReactDOM.renderToStaticMarkup(
+      <html lang={this.opts.locale}>
+        <head>
+          <title>{titleForRoute(route, this.opts.siteName)}</title>
+          {this.routeMetaData(route)}
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="manifest" href="/manifest.json" />
+          <link
+            href="https://fonts.googleapis.com/css?family=Montserrat"
+            rel="stylesheet"
+          />
+          <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
+          <script defer src="/static/client.js" />
+          <script
+            id="initialState"
+            type="application/json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({initialRoute: route})
+            }}
+          />
+        </head>
+        <body>
+          <div
+            id="application"
+            dangerouslySetInnerHTML={{__html: componentString}}
+          />
+        </body>
+      </html>
+    )
+
+    return `<!doctype html>${markup}`
+  }
+
+  private routeMetaData(route: Route): ReactNode {
+    switch (route.type) {
+      case RouteType.Article:
+        return (
+          route.article && (
+            <React.Fragment>
+              <meta property="og:title" content={route.article.title} />
+              <meta
+                property="og:description"
+                content={route.article.description}
+              />
+              <meta property="og:image" content={route.article.image} />
+              <meta property="og:url" content={''} />
+            </React.Fragment>
+          )
+        ) // TODO: Resolve URL to article
+    }
+
+    return undefined
   }
 
   private async getArticle(id: string): Promise<Article> {
@@ -242,11 +243,11 @@ export class Server {
 
   private async getArticles(): Promise<ListArticle[]> {
     const today = new Date()
-    const oneWeekAgo = new Date()
+    const twoWeeksAgo = new Date()
 
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 14)
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14)
 
-    return this.opts.dataSource.getArticles(today, oneWeekAgo)
+    return this.opts.dataSource.getArticles(today, twoWeeksAgo)
   }
 
   public async getRouteWithData(
@@ -256,19 +257,25 @@ export class Server {
     const route = matchRoute(path, query)
 
     switch (route.type) {
-      case RouteType.Article:
-        return {...route, article: await this.getArticle(route.articleID)}
+      case RouteType.Article: {
+        const article = await this.getArticle(route.articleID)
+        return {...route, article: article}
+      }
 
       case RouteType.Front:
         return {
           ...route,
           blocks: (await this.getArticles()).map(article => {
-            return {id: article.id, type: CoreBlockType.Article, data: article}
+            return {
+              id: article.id,
+              type: CoreBlockType.Article,
+              data: article
+            }
           })
         }
     }
 
-    return {type: RouteType.NotFound}
+    return route
   }
 
   public async listen() {

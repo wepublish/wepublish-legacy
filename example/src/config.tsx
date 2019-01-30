@@ -18,14 +18,17 @@ export const brandTheme = {
     color2: '#F9F9F9',
     color3: '#CCCCCC',
     color4: '#ECECEC',
-    color5: '#454545',
-    color6: '#000000',
+    color5: '#979797',
+    color6: '#454545',
+    color7: '#000000',
     primaryTextColor: '#222222',
     shadowColor: rgba(170, 170, 170, 0.3).toString()
   }
 }
 
 export const configuration = {
+  siteName: 'we.publish example',
+  talkURL: process.env.TALK_URL!,
   locale: 'de',
   dateLocale: de,
   theme: brandTheme

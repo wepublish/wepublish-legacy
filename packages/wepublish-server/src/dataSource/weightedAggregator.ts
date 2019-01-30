@@ -77,7 +77,7 @@ export class WeightedAggregatorDataSource {
 
     mixedArticles.sort(
       (a, b) =>
-        new Date(a.published).getTime() - new Date(b.published).getTime()
+        new Date(b.published).getTime() - new Date(a.published).getTime()
     )
 
     return mixedArticles

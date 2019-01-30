@@ -56,7 +56,6 @@ export class HistoryRouteContextProvider extends React.Component<
 
   public componentDidMount() {
     window.addEventListener('popstate', () => {
-      // TODO: Query paramter
       const route = matchRoute(window.location.pathname, window.location.search)
       this.setState({route: route})
     })

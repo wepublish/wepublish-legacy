@@ -6,7 +6,8 @@ export enum RouteType {
   NotFound = 'notFound',
   InternalServerError = 'internalServerError',
   Front = 'front',
-  Article = 'article'
+  Article = 'article',
+  Comment = 'comment'
 }
 
 export interface FrontRoute {
@@ -19,6 +20,12 @@ export interface ArticleRoute {
   titleSlug: string
   articleID: string
   article?: Article
+}
+
+export interface CommentRoute {
+  type: RouteType.Comment
+  titleSlug: string
+  articleID: string
 }
 
 export interface NotFoundRoute {
@@ -38,23 +45,32 @@ export interface ArticleRouteJSON {
   type: RouteType.Article
   titleSlug: string
   articleID: string
-  article: ArticleJSON
+  article?: ArticleJSON
+}
+
+export interface CommentRouteJSON {
+  type: RouteType.Comment
+  titleSlug: string
+  articleID: string
 }
 
 export type Route =
   | FrontRoute
   | ArticleRoute
+  | CommentRoute
   | NotFoundRoute
   | InternalServerErrorRoute
 
 export type RouteJSON =
   | FrontRouteJSON
   | ArticleRouteJSON
+  | CommentRouteJSON
   | NotFoundRoute
   | InternalServerErrorRoute
 
 const router = new Trie()
 const articleNode = router.define('/article/:slug/:id')
+const commentNode = router.define('/article/:slug/:id/comments')
 const frontNode = router.define('/')
 
 export function matchRoute(
@@ -74,6 +90,13 @@ export function matchRoute(
         articleID: match.params.id
       }
 
+    case commentNode:
+      return {
+        type: RouteType.Comment,
+        titleSlug: match.params.slug,
+        articleID: match.params.id
+      }
+
     case frontNode:
       return {type: RouteType.Front}
   }
@@ -85,6 +108,9 @@ export function reverseRoute(route: Route): string {
   switch (route.type) {
     case RouteType.Article:
       return `/article/${route.titleSlug}/${route.articleID}`
+
+    case RouteType.Comment:
+      return `/article/${route.titleSlug}/${route.articleID}/comments`
 
     case RouteType.Front:
       return `/`
@@ -100,7 +126,7 @@ export function reverseRoute(route: Route): string {
 export function unserializeRoute(json: RouteJSON): Route {
   switch (json.type) {
     case RouteType.Article:
-      return {...json, article: Article.fromJSON(json.article)}
+      return {...json, article: json.article && Article.fromJSON(json.article)}
 
     case RouteType.Front:
       return {
@@ -115,4 +141,13 @@ export function unserializeRoute(json: RouteJSON): Route {
   }
 
   return {...json}
+}
+
+export function titleForRoute(route: Route, fallback: string): string {
+  switch (route.type) {
+    case RouteType.Article:
+      return (route.article && route.article.title) || fallback
+  }
+
+  return fallback
 }

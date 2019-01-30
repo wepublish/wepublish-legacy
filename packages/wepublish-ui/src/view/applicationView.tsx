@@ -8,6 +8,7 @@ import {StaticThemeContextProvider} from '../context/themeContext'
 
 import {ApplicationOptions} from '../option'
 import {RouteView} from './routeView'
+import {StaticAppContextProvider} from '../context/appContext'
 
 export interface ApplicationViewProps extends ApplicationOptions {
   initialRoute: Route
@@ -15,14 +16,16 @@ export interface ApplicationViewProps extends ApplicationOptions {
 
 export function ApplicationView(props: ApplicationViewProps) {
   return (
-    <HistoryRouteContextProvider initialRoute={props.initialRoute}>
-      <StaticLocaleContextProvider
-        locale={props.locale}
-        dateLocale={props.dateLocale}>
-        <StaticThemeContextProvider theme={props.theme}>
-          <RouteView />
-        </StaticThemeContextProvider>
-      </StaticLocaleContextProvider>
-    </HistoryRouteContextProvider>
+    <StaticAppContextProvider siteName={props.siteName} talkURL={props.talkURL}>
+      <HistoryRouteContextProvider initialRoute={props.initialRoute}>
+        <StaticLocaleContextProvider
+          locale={props.locale}
+          dateLocale={props.dateLocale}>
+          <StaticThemeContextProvider theme={props.theme}>
+            <RouteView />
+          </StaticThemeContextProvider>
+        </StaticLocaleContextProvider>
+      </HistoryRouteContextProvider>
+    </StaticAppContextProvider>
   )
 }
