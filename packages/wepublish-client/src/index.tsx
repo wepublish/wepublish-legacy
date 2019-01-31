@@ -62,6 +62,7 @@ async function initialize(opts: ClientOptions) {
       locale={opts.locale}
       dateLocale={opts.dateLocale}
       theme={opts.theme}
+      hostname={opts.hostname}
     />,
     applicationElement
   )

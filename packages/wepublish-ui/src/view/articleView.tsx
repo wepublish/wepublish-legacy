@@ -1,4 +1,4 @@
-import React, {useMemo, useContext} from 'react'
+import React, {useMemo, useContext, useEffect} from 'react'
 import {Article} from '@wepublish/common'
 import {rem, percent, em} from 'csx'
 import {formatRelative} from 'date-fns'
@@ -6,6 +6,7 @@ import {formatRelative} from 'date-fns'
 import {useThemeStyle} from '../context/themeContext'
 import {LocaleContext} from '../context/localeContext'
 import {debugName} from '../style'
+import {AppContext} from '../context/appContext'
 
 export interface ArticleViewProps {
   article?: Article
@@ -19,7 +20,6 @@ export function ArticleView(props: ArticleViewProps) {
       $debugName: debugName(ArticleView),
       padding: `${rem(2.1)} ${rem(2.3)}`,
       backgroundColor: theme.colors.color1,
-      // maxWidth: rem(136.5),
       maxWidth: rem(84.5),
       margin: '0 auto',
 
@@ -83,6 +83,58 @@ export function ArticleView(props: ArticleViewProps) {
       </header>
       <img className="leadImage" src={props.article.image} />
       {elements}
+      <CommentSection articleID={props.article.id} />
     </article>
   )
+}
+
+declare var Coral: any
+
+export interface CommentSectionProps {
+  articleID: string
+}
+
+let insertedTalkScript = false
+
+export function CommentSection(_props: CommentSectionProps) {
+  const appContext = useContext(AppContext)
+  const talkContainer = React.createRef<HTMLDivElement>()
+
+  useEffect(() => {
+    if (!insertedTalkScript) {
+      const scriptEl = document.createElement('script')
+
+      scriptEl.type = 'text/javascript'
+      scriptEl.async = true
+      scriptEl.src = `${appContext.talkURL}/embed.js`
+      scriptEl.onload = () => {
+        Coral.Talk.render(talkContainer.current, {
+          talk: appContext.talkURL,
+          // asset_id: props.articleID, // TODO: Install plugin in talk server
+          asset_url: location.href,
+          lazy: true
+        })
+      }
+
+      document.head.appendChild(scriptEl)
+      insertedTalkScript = true
+    } else {
+      Coral.Talk.render(talkContainer.current, {
+        talk: appContext.talkURL
+      })
+    }
+  }, [])
+
+  const className = useThemeStyle(theme => [
+    {
+      $debugName: debugName(CommentSection),
+      padding: `${rem(2.1)} ${rem(2.3)}`,
+      backgroundColor: theme.colors.color1,
+      maxWidth: rem(84.5),
+      width: percent(100),
+      margin: '0 auto'
+    }
+  ])
+
+  return <section className={className} ref={talkContainer} />
 }

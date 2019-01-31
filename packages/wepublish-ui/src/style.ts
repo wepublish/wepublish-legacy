@@ -35,7 +35,8 @@ export function initializeCSSRules(target?: Element) {
 export const breakpoint = {
   mobile: px(0),
   tablet: px(720),
-  desktop: px(1000)
+  desktop: px(1000),
+  full: px(1410)
 }
 
 export const zIndex = {

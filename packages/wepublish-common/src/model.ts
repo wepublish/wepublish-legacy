@@ -2,7 +2,8 @@ import {Value, ValueJSON} from 'slate'
 import {slugify} from './utility'
 
 export enum CoreBlockType {
-  Article = 'article'
+  Article = 'article',
+  Brand = 'brand'
 }
 
 export interface Block<T = any> {

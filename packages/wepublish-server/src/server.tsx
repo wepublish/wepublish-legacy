@@ -4,14 +4,15 @@ import fs from 'fs'
 import fastify from 'fastify'
 import fastifyCompress from 'fastify-compress'
 
-import React, {ReactNode} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/server'
 import {getStyles} from 'typestyle'
 
 import {
   ApplicationView,
   initializeCSSRules,
-  ApplicationOptions
+  ApplicationOptions,
+  extractMetadata
 } from '@wepublish/ui'
 
 import {
@@ -20,8 +21,7 @@ import {
   ListArticle,
   RouteType,
   matchRoute,
-  Route,
-  titleForRoute
+  Route
 } from '@wepublish/common'
 
 import {DataSource} from './dataSource/interface'
@@ -151,6 +151,7 @@ export class Server {
           locale={opts.locale}
           dateLocale={opts.dateLocale}
           theme={opts.theme}
+          hostname={opts.hostname}
         />
       )
 
@@ -169,6 +170,7 @@ export class Server {
           locale={opts.locale}
           dateLocale={opts.dateLocale}
           theme={opts.theme}
+          hostname={opts.hostname}
         />
       )
 
@@ -186,9 +188,9 @@ export class Server {
     const markup = ReactDOM.renderToStaticMarkup(
       <html lang={this.opts.locale}>
         <head>
-          <title>{titleForRoute(route, this.opts.siteName)}</title>
-          {this.routeMetaData(route)}
+          {extractMetadata()}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+
           <link rel="manifest" href="/manifest.json" />
           <link
             href="https://fonts.googleapis.com/css?family=Montserrat"
@@ -214,27 +216,6 @@ export class Server {
     )
 
     return `<!doctype html>${markup}`
-  }
-
-  private routeMetaData(route: Route): ReactNode {
-    switch (route.type) {
-      case RouteType.Article:
-        return (
-          route.article && (
-            <React.Fragment>
-              <meta property="og:title" content={route.article.title} />
-              <meta
-                property="og:description"
-                content={route.article.description}
-              />
-              <meta property="og:image" content={route.article.image} />
-              <meta property="og:url" content={''} />
-            </React.Fragment>
-          )
-        ) // TODO: Resolve URL to article
-    }
-
-    return undefined
   }
 
   private async getArticle(id: string): Promise<Article> {

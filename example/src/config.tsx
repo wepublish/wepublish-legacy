@@ -31,5 +31,6 @@ export const configuration = {
   talkURL: process.env.TALK_URL!,
   locale: 'de',
   dateLocale: de,
-  theme: brandTheme
+  theme: brandTheme,
+  hostname: process.env.HOSTNAME!
 }

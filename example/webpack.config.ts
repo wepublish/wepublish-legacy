@@ -19,7 +19,8 @@ export const clientConfig: webpack.Configuration = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.TALK_URL': JSON.stringify(process.env.TALK_URL)
+      'process.env.TALK_URL': JSON.stringify(process.env.TALK_URL),
+      'process.env.HOSTNAME': JSON.stringify(process.env.HOSTNAME)
     })
   ]
 }

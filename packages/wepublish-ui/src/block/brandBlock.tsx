@@ -14,7 +14,7 @@ export function BrandBlock() {
       alignItems: 'center',
       justifyContent: 'center',
 
-      padding: rem(7),
+      padding: percent(17.5),
       fontSize: rem(2),
 
       height: percent(100),

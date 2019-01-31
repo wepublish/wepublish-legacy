@@ -7,4 +7,5 @@ export interface ApplicationOptions {
   readonly dateLocale?: Locale
   readonly theme?: Theme
   readonly talkURL: string
+  readonly hostname: string
 }

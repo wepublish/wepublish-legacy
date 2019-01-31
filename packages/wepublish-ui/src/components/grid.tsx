@@ -1,10 +1,11 @@
 import React, {ReactNode, useContext} from 'react'
 import {media} from 'typestyle'
-import {rem, percent} from 'csx'
+import {percent} from 'csx'
 import {debugName} from '../style'
 import {useStyle} from '../context/themeContext'
 
 export interface GridItemProps {
+  visibleAtBreakpoints?: (string | number)[]
   children?: ReactNode
 }
 
@@ -14,10 +15,14 @@ export function GridItem(props: GridItemProps) {
     () => [
       {
         $debugName: debugName(GridItem),
+        display:
+          props.visibleAtBreakpoints && props.visibleAtBreakpoints.length
+            ? 'none'
+            : 'block',
         flexBasis: percent((1 / gridContext.columns) * 100),
-        padding: `${rem(gridContext.spacingVertical / 2)} ${rem(
-          gridContext.spacingHorizontal / 2
-        )}`
+        padding: `${gridContext.unitFn(
+          gridContext.spacingVertical / 2
+        )} ${gridContext.unitFn(gridContext.spacingHorizontal / 2)}`
       },
       ...Object.keys(gridContext.breakpoints).map(key =>
         media(
@@ -26,6 +31,9 @@ export function GridItem(props: GridItemProps) {
             flexBasis: percent((1 / gridContext.breakpoints[key]) * 100)
           }
         )
+      ),
+      ...(props.visibleAtBreakpoints || []).map(breakpoint =>
+        media({minWidth: breakpoint}, {display: 'block'})
       )
     ],
     [
@@ -58,6 +66,7 @@ export interface GridContext {
   columns: number
   spacingHorizontal: number
   spacingVertical: number
+  unitFn: (num: number) => string | number
   breakpoints: {[size: string]: number}
 }
 
@@ -69,6 +78,7 @@ export const GridContext = React.createContext<GridContext>({
   columns: 0,
   spacingHorizontal: 0,
   spacingVertical: 0,
+  unitFn: () => '',
   breakpoints: {}
 })
 
@@ -80,7 +90,9 @@ export function Grid(props: GridProps) {
   const className = useStyle(() => [
     {
       $debugName: debugName(Grid),
-      margin: rem(-props.spacingHorizontal / 2)
+      margin: `${props.unitFn(-props.spacingVertical / 2)} ${props.unitFn(
+        -props.spacingHorizontal / 2
+      )}`
     }
   ])
 
