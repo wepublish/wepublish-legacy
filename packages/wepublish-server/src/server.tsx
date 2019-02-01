@@ -261,7 +261,7 @@ export class Server {
 
   public async listen() {
     return new Promise((resolve, rejected) => {
-      this.httpServer.listen(this.opts.port || 3000, err => {
+      this.httpServer.listen(this.opts.port || 3000, '0.0.0.0', err => {
         if (err) return rejected(err)
         resolve()
       })

@@ -1,9 +1,8 @@
 .DS_Store
 .idea/
 dist/
-dist-server/
-dist-client/
 lib/
+packages/**/LICENSE
 node_modules
 npm-debug.log
 yarn-error.log

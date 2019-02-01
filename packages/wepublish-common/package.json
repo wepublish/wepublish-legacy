@@ -1,12 +1,15 @@
 {
   "name": "@wepublish/common",
   "version": "0.0.0",
-  "private": true,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "license": "MIT",
   "scripts": {
     "build": "tsc --outDir ./lib --declaration --declarationMap",
     "watch": "tsc --outDir ./lib --declaration --declarationMap --watch",
+    "copy:license": "shx cp ../../LICENSE ./",
+    "clean": "shx rm -rf ./LICENSE ./lib",
+    "prepare": "run-s clean copy:license build sync-package-info",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {
@@ -16,6 +19,8 @@
   "devDependencies": {
     "@types/query-string": "^6.2.0",
     "@types/slate": "^0.43.8",
-    "typescript": "^3.2.2"
+    "npm-run-all": "^4.1.5",
+    "typescript": "^3.2.2",
+    "shx": "^0.3.2"
   }
 }
