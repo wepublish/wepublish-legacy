@@ -26,17 +26,27 @@ export function initializeCSSRules(target?: Element) {
   cssRule('body', {
     minWidth: rem(30)
   })
-
   cssRule('*, *:before, *:after ', {
     boxSizing: 'inherit'
   })
 }
 
 export const breakpoint = {
-  mobile: px(0),
-  tablet: px(720),
-  desktop: px(1000),
-  full: px(1410)
+  mobile: 0,
+  tablet: 720,
+  desktop: 1000
+}
+
+export const mediaQueries = {
+  mobile: {
+    minWidth: px(breakpoint.mobile),
+    maxWidth: px(breakpoint.tablet - 1)
+  },
+  tablet: {
+    minWidth: px(breakpoint.tablet),
+    maxWidth: px(breakpoint.desktop - 1)
+  },
+  desktop: {minWidth: px(breakpoint.desktop)}
 }
 
 export const zIndex = {

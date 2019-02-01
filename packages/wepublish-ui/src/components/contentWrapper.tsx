@@ -1,87 +1,117 @@
 import React, {ReactNode} from 'react'
-import {useThemeStyle, useTheme} from '../context/themeContext'
+import {useThemeStyle, useTheme, useStyle} from '../context/themeContext'
 
 import {NavigationIcon} from './icons'
 import {media} from 'typestyle'
-import {em, percent, rem, viewHeight, px} from 'csx'
-import {breakpoint, debugName, zIndex} from '../style'
+import {em, rem, viewHeight, px} from 'csx'
+import {debugName, zIndex, mediaQueries} from '../style'
 
 export interface ContentWrapperProps {
   children: ReactNode
 }
 
 export function ContentWrapper(props: ContentWrapperProps) {
-  const className = useThemeStyle(theme => [
+  const className = useStyle(() => [
     {
       $debugName: debugName(ContentWrapper),
 
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      minHeight: viewHeight(100),
-
-      $nest: {
-        '> .header': {
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          position: 'sticky',
-          zIndex: zIndex.navigation,
-          top: 0,
-          backgroundColor: theme.colors.color1,
-          borderBottom: `${px(1)} solid ${theme.colors.color4}`,
-          fontSize: rem(2.2),
-          padding: `${rem(1.6)} ${rem(2)}`,
-
-          $nest: {
-            '> .logo': {
-              height: em(1),
-              margin: '0 auto'
-            }
-          }
-        },
-
-        '> .content': {
-          display: 'flex',
-          flexGrow: 1,
-          width: percent(100)
-        }
-      }
-    },
-    media(
-      {minWidth: breakpoint.tablet},
-      {
-        flexDirection: 'row',
-
-        $nest: {
-          '> .header': {
-            flexDirection: 'column',
-            height: viewHeight(100),
-            borderBottom: 'none',
-            borderRight: `${px(1)} solid ${theme.colors.color4}`,
-            padding: rem(2.6),
-
-            $nest: {
-              '> .logo': {
-                display: 'none'
-              }
-            }
-          }
-        }
-      }
-    )
+      minHeight: viewHeight(100)
+    }
   ])
 
-  const logo = useTheme(theme => <theme.logoComponent className="logo" />)
+  const headerClassName = useThemeStyle(theme => [
+    {
+      $debugName: debugName(ContentWrapper, 'header'),
+
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'sticky',
+      zIndex: zIndex.navigation,
+      top: 0,
+      backgroundColor: theme.colors.color1,
+      borderBottom: `${px(1)} solid ${theme.colors.color4}`,
+      fontSize: rem(2.2),
+      padding: `${rem(1.6)} ${rem(2)}`
+    },
+    media(mediaQueries.tablet, {
+      flexDirection: 'column',
+      maxHeight: viewHeight(100),
+      borderBottom: 'none',
+      borderRight: `${px(1)} solid ${theme.colors.color4}`,
+      padding: rem(2.6)
+    }),
+    media(mediaQueries.desktop, {
+      flexDirection: 'column',
+      maxHeight: viewHeight(100),
+      borderBottom: 'none',
+      borderRight: `${px(1)} solid ${theme.colors.color4}`,
+      padding: rem(2.6)
+    })
+  ])
+
+  const logoClassName = useStyle(() => [
+    {
+      $debugName: debugName(ContentWrapper, 'logo'),
+
+      height: em(1),
+      margin: '0 auto'
+    },
+    media(mediaQueries.tablet, {
+      display: 'none'
+    }),
+    media(mediaQueries.desktop, {
+      display: 'none'
+    })
+  ])
+
+  const contentWrapperClassName = useStyle(() => [
+    {
+      $debugName: debugName(ContentWrapper, 'contentWrapper'),
+
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1
+    },
+    media(mediaQueries.tablet, {
+      flexDirection: 'row'
+    }),
+    media(mediaQueries.desktop, {
+      flexDirection: 'row'
+    })
+  ])
+
+  const contentClassName = useStyle(() => ({
+    $debugName: debugName(ContentWrapper, 'content'),
+
+    display: 'flex',
+    flexGrow: 1
+  }))
+
+  const footerClassName = useThemeStyle(theme => ({
+    $debugName: debugName(ContentWrapper, 'footer'),
+
+    display: 'flex',
+    backgroundColor: theme.colors.color1
+  }))
+
+  const logo = useTheme(theme => (
+    <theme.logoComponent className={logoClassName} />
+  ))
 
   return (
     <div className={className}>
-      <header className="header">
-        <NavigationIcon />
-        {logo}
-      </header>
-      <div className="content">{props.children}</div>
-      <footer />
+      <div className={contentWrapperClassName}>
+        <header className={headerClassName}>
+          <NavigationIcon />
+          {logo}
+        </header>
+        <div className={contentClassName}>{props.children}</div>
+      </div>
+      <footer className={footerClassName} />
     </div>
   )
 }

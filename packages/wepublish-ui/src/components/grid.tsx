@@ -1,52 +1,69 @@
-import React, {ReactNode, useContext} from 'react'
-import {media} from 'typestyle'
-import {percent} from 'csx'
+import React, {ReactNode, useContext, ReactHTML} from 'react'
+import {media, classes} from 'typestyle'
+import {percent, rem, px} from 'csx'
 import {debugName} from '../style'
 import {useStyle} from '../context/themeContext'
 
 export interface GridItemProps {
+  tag?: keyof ReactHTML
+  className?: string
+  span: number
+  spanBreakpoints?: {[key: number]: number}
   visibleAtBreakpoints?: (string | number)[]
   children?: ReactNode
 }
 
 export function GridItem(props: GridItemProps) {
   const gridContext = useContext(GridContext)
+  const spanBreakpoints = props.spanBreakpoints
+
+  if (props.span > gridContext.columns)
+    throw new Error('GridItem span larger than Grid columns')
+
   const className = useStyle(
     () => [
       {
         $debugName: debugName(GridItem),
-        display:
-          props.visibleAtBreakpoints && props.visibleAtBreakpoints.length
-            ? 'none'
-            : 'block',
-        flexBasis: percent((1 / gridContext.columns) * 100),
+        display: props.span ? 'block' : 'none',
+        flexBasis: percent((props.span / gridContext.columns) * 100),
         padding: `${gridContext.unitFn(
           gridContext.spacingVertical / 2
         )} ${gridContext.unitFn(gridContext.spacingHorizontal / 2)}`
       },
-      ...Object.keys(gridContext.breakpoints).map(key =>
-        media(
-          {minWidth: key},
-          {
-            flexBasis: percent((1 / gridContext.breakpoints[key]) * 100)
-          }
-        )
-      ),
-      ...(props.visibleAtBreakpoints || []).map(breakpoint =>
-        media({minWidth: breakpoint}, {display: 'block'})
-      )
+      ...(spanBreakpoints
+        ? Object.keys(spanBreakpoints).map(key => {
+            const numKey = parseInt(key)
+            return media(
+              {minWidth: px(numKey)},
+              {
+                flexBasis: percent(
+                  (spanBreakpoints[numKey] / gridContext.columns) * 100
+                ),
+                display: spanBreakpoints[numKey] ? 'block' : 'none'
+              }
+            )
+          })
+        : [])
     ],
     [
       gridContext.columns,
       gridContext.spacingVertical,
-      gridContext.spacingHorizontal
+      gridContext.spacingHorizontal,
+      spanBreakpoints
     ]
   )
 
-  return <div className={className}>{props.children}</div>
+  const TagName = (props.tag || 'div') as any
+  return (
+    <TagName className={classes(className, props.className)}>
+      {props.children}
+    </TagName>
+  )
 }
 
 export interface GridRowProps {
+  tag?: keyof ReactHTML
+  className?: string
   children?: ReactNode
 }
 
@@ -59,7 +76,12 @@ export function GridRow(props: GridRowProps) {
     }
   ])
 
-  return <div className={className}>{props.children}</div>
+  const TagName = (props.tag || 'div') as any
+  return (
+    <TagName className={classes(className, props.className)}>
+      {props.children}
+    </TagName>
+  )
 }
 
 export interface GridContext {
@@ -67,7 +89,6 @@ export interface GridContext {
   spacingHorizontal: number
   spacingVertical: number
   unitFn: (num: number) => string | number
-  breakpoints: {[size: string]: number}
 }
 
 export interface GridBreakpoint {
@@ -78,11 +99,12 @@ export const GridContext = React.createContext<GridContext>({
   columns: 0,
   spacingHorizontal: 0,
   spacingVertical: 0,
-  unitFn: () => '',
-  breakpoints: {}
+  unitFn: rem
 })
 
 export interface GridProps extends GridContext {
+  tag?: keyof ReactHTML
+  className?: string
   children?: ReactNode
 }
 
@@ -96,11 +118,13 @@ export function Grid(props: GridProps) {
     }
   ])
 
+  const TagName = (props.tag || 'div') as any
+
   return (
-    <div className={className}>
+    <TagName className={classes(className, props.className)}>
       <GridContext.Provider value={props}>
         {props.children}
       </GridContext.Provider>
-    </div>
+    </TagName>
   )
 }

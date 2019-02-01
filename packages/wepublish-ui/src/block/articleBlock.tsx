@@ -5,7 +5,7 @@ import {formatDistanceStrict} from 'date-fns'
 import {Article, RouteType} from '@wepublish/common'
 import {Link} from '../components/link'
 import {useThemeStyle, useStyle} from '../context/themeContext'
-import {debugName, breakpoint} from '../style'
+import {debugName, mediaQueries} from '../style'
 import {AspectRatio} from '../components/aspectRatio'
 import {LocaleContext} from '../context/localeContext'
 
@@ -20,21 +20,17 @@ export function ArticleBlock(props: ArticleBlockProps) {
 
       display: 'block',
       backgroundColor: theme.colors.color1,
-      boxShadow: `0 0 ${rem(2.5)} ${theme.colors.shadowColor}`,
-      fontSize: rem(2)
+      boxShadow: `0 0 ${rem(2.5)} ${theme.colors.shadowColor}`
     },
-    media(
-      {minWidth: breakpoint.tablet},
-      {
-        fontSize: rem(2)
-      }
-    ),
-    media(
-      {minWidth: breakpoint.desktop},
-      {
-        fontSize: rem(2.5)
-      }
-    )
+    media(mediaQueries.mobile, {
+      fontSize: rem(2)
+    }),
+    media(mediaQueries.tablet, {
+      fontSize: rem(2)
+    }),
+    media(mediaQueries.desktop, {
+      fontSize: rem(2.5)
+    })
   ])
 
   const imageClassName = useThemeStyle(theme => [
@@ -126,20 +122,23 @@ export function ArticleBlock(props: ArticleBlockProps) {
       <article>
         <AspectRatio ratio={8 / 9}>
           <div className={contentWrapperClassName}>
-            <AspectRatio ratio={40 / 23}>
-              <div
-                className={imageClassName}
-                style={{backgroundImage: url(props.article.image)}}>
-                <img alt={props.article.title} src={props.article.image} />
-              </div>
-            </AspectRatio>
+            {props.article.image && (
+              <AspectRatio ratio={40 / 23}>
+                <div
+                  className={imageClassName}
+                  style={{backgroundImage: url(props.article.image)}}>
+                  <img alt={props.article.title} src={props.article.image} />
+                </div>
+              </AspectRatio>
+            )}
             <div className={contentClassName}>{props.article.title}</div>
             <div className={footerClassName}>
               <time
                 className={timeClassName}
                 dateTime={props.article.published.toISOString()}>
                 {formatDistanceStrict(props.article.published, new Date(), {
-                  locale: localeContext.dateLocale
+                  locale: localeContext.dateLocale,
+                  addSuffix: true
                 })}
               </time>
             </div>

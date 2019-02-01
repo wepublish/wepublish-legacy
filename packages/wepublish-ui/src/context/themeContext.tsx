@@ -17,6 +17,7 @@ export interface Theme {
     color5: string
     color6: string
     color7: string
+    linkColor: string
     primaryTextColor: string
     shadowColor: string
   }
@@ -32,6 +33,7 @@ export const defaultTheme: Theme = {
     color5: '#979797',
     color6: '#454545',
     color7: '#000000',
+    linkColor: '#222222',
     primaryTextColor: '#222222',
     shadowColor: rgba(170, 170, 170, 0.3).toString()
   }

@@ -23,13 +23,21 @@ export class Article {
   readonly description!: string
   readonly published!: Date
   readonly author!: string
-  readonly image!: string
+  readonly image?: string
   readonly platform!: string
   readonly link!: string
   readonly content!: Value
 
   constructor(init: ModelData<Article>) {
-    Object.assign(this, init)
+    this.id = init.id
+    this.title = init.title
+    this.description = init.description
+    this.published = init.published
+    this.author = init.author
+    this.image = init.image || undefined
+    this.platform = init.platform
+    this.link = init.link
+    this.content = init.content
   }
 
   getTitleSlug(): string {
@@ -61,7 +69,7 @@ export interface ArticleJSON {
   id: string
   author: string
   description: string
-  image: string
+  image?: string
   link: string
   platform: string
   published: string
@@ -75,12 +83,19 @@ export class ListArticle {
   readonly description!: string
   readonly published!: Date
   readonly author!: string
-  readonly image!: string
+  readonly image?: string
   readonly platform!: string
   readonly link!: string
 
   constructor(init: ModelData<ListArticle>) {
-    Object.assign(this, init)
+    this.id = init.id
+    this.title = init.title
+    this.description = init.description
+    this.published = init.published
+    this.author = init.author
+    this.image = init.image || undefined
+    this.platform = init.platform
+    this.link = init.link
   }
 
   getTitleSlug(): string {
@@ -110,7 +125,7 @@ export interface ListArticleJSON {
   id: string
   author: string
   description: string
-  image: string
+  image?: string
   link: string
   platform: string
   published: string

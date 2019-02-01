@@ -21,6 +21,7 @@ export const brandTheme = {
     color5: '#979797',
     color6: '#454545',
     color7: '#000000',
+    linkColor: '#222222',
     primaryTextColor: '#222222',
     shadowColor: rgba(170, 170, 170, 0.3).toString()
   }

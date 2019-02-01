@@ -1,5 +1,5 @@
 import {Article, ListArticle} from '@wepublish/common'
-import {Remote, UserSession} from '@karma.run/sdk'
+import {Remote, UserSession, PermissionDeniedError} from '@karma.run/sdk'
 import * as xpr from '@karma.run/sdk/expression'
 
 import {DataSource} from './interface'
@@ -58,6 +58,10 @@ export class KarmaDataSource implements DataSource {
     this.remote = new Remote(url)
   }
 
+  private async clearSession() {
+    this.session = undefined
+  }
+
   private async getSession(): Promise<UserSession> {
     if (this.session) return this.session
     this.session = await this.remote.login(this.username, this.password)
@@ -92,8 +96,12 @@ export class KarmaDataSource implements DataSource {
       )
       return this.transformArticle(article)
     } catch (err) {
-      // TODO: Check session expiration and refetch
-      console.log(err)
+      if (err instanceof PermissionDeniedError) {
+        this.clearSession()
+        return this.getArticle(id)
+      }
+
+      console.error(err)
       throw err
     }
   }
@@ -124,8 +132,12 @@ export class KarmaDataSource implements DataSource {
 
       return articles.map(article => this.transformListArticle(article))
     } catch (err) {
-      // TODO: Check session expiration and refetch
-      console.log(err)
+      if (err instanceof PermissionDeniedError) {
+        this.clearSession()
+        return this.getArticles(from, to)
+      }
+
+      console.error(err)
       throw err
     }
   }

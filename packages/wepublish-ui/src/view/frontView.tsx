@@ -24,7 +24,7 @@ export function FrontView(props: FrontViewProps) {
       $nest: {
         '> .contentWrapper': {
           width: percent(100),
-          maxWidth: rem(136),
+          maxWidth: rem(128),
           margin: '0 auto',
 
           $nest: {
@@ -51,18 +51,15 @@ export function FrontView(props: FrontViewProps) {
       <div className="contentWrapper">
         <div className="content">
           <Grid
-            columns={1}
+            columns={3}
             spacingVertical={5}
             spacingHorizontal={3}
-            unitFn={percent}
-            breakpoints={{[breakpoint.tablet]: 3}}>
+            unitFn={percent}>
             <GridRow>
               {blocks.map(block => (
-                <GridItem
-                  key={block.id}
-                  visibleAtBreakpoints={itemVisibilityForBlock(block)}>
+                <React.Fragment key={block.id}>
                   {viewForBlock(block)}
-                </GridItem>
+                </React.Fragment>
               ))}
             </GridRow>
           </Grid>
@@ -72,22 +69,21 @@ export function FrontView(props: FrontViewProps) {
   )
 }
 
-function itemVisibilityForBlock(block: Block) {
-  switch (block.type) {
-    case CoreBlockType.Brand:
-      return [breakpoint.tablet]
-  }
-
-  return undefined
-}
-
 function viewForBlock(block: Block) {
   switch (block.type) {
     case CoreBlockType.Article:
-      return <ArticleBlock article={block.data} />
+      return (
+        <GridItem span={3} spanBreakpoints={{[breakpoint.tablet]: 1}}>
+          <ArticleBlock article={block.data} />
+        </GridItem>
+      )
 
     case CoreBlockType.Brand:
-      return <BrandBlock />
+      return (
+        <GridItem span={0} spanBreakpoints={{[breakpoint.tablet]: 1}}>
+          <BrandBlock />
+        </GridItem>
+      )
 
     default:
       return <div>Unknown block</div>

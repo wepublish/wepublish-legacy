@@ -193,7 +193,7 @@ export class Server {
 
           <link rel="manifest" href="/manifest.json" />
           <link
-            href="https://fonts.googleapis.com/css?family=Montserrat"
+            href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i"
             rel="stylesheet"
           />
           <style id="style" dangerouslySetInnerHTML={{__html: getStyles()}} />
