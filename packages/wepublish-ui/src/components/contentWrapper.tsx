@@ -21,7 +21,7 @@ export function ContentWrapper(props: ContentWrapperProps) {
       minHeight: viewHeight(100),
 
       $nest: {
-        '> .navigationBar': {
+        '> .header': {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
@@ -54,7 +54,7 @@ export function ContentWrapper(props: ContentWrapperProps) {
         flexDirection: 'row',
 
         $nest: {
-          '> .navigationBar': {
+          '> .header': {
             flexDirection: 'column',
             height: viewHeight(100),
             borderBottom: 'none',
@@ -75,12 +75,13 @@ export function ContentWrapper(props: ContentWrapperProps) {
   const logo = useTheme(theme => <theme.logoComponent className="logo" />)
 
   return (
-    <header className={className}>
-      <nav className="navigationBar">
+    <div className={className}>
+      <header className="header">
         <NavigationIcon />
         {logo}
-      </nav>
+      </header>
       <div className="content">{props.children}</div>
-    </header>
+      <footer />
+    </div>
   )
 }
