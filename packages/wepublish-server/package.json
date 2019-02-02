@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@wepublish/common": "^0.0.0",
-    "@wepublish/ui": "^0.0.0",
+    "@wepublish/ui": "^0.0.1",
     "@karma.run/sdk": "beta",
     "fastify": "^1.13.4",
     "fastify-static": "^1.1.0",

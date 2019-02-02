@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@wepublish/common": "^0.0.0",
-    "@wepublish/ui": "^0.0.0",
+    "@wepublish/ui": "^0.0.1",
     "react": "^16.8.0-alpha.1",
     "react-dom": "^16.8.0-alpha.1"
   },
