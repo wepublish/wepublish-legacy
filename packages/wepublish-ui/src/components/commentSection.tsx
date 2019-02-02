@@ -26,8 +26,7 @@ export function CommentSection(props: CommentSectionProps) {
       scriptEl.onload = () => {
         Coral.Talk.render(talkContainer.current, {
           talk: appContext.talkURL,
-          asset_id: props.articleID, // TODO: Install plugin in talk server
-          asset_url: location.href,
+          asset_id: props.articleID,
           lazy: true
         })
       }
@@ -36,7 +35,9 @@ export function CommentSection(props: CommentSectionProps) {
       insertedTalkScript = true
     } else {
       Coral.Talk.render(talkContainer.current, {
-        talk: appContext.talkURL
+        talk: appContext.talkURL,
+        asset_id: props.articleID,
+        lazy: true
       })
     }
   }, [])
