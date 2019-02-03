@@ -39,7 +39,7 @@ export function ArticleBlock(props: ArticleBlockProps) {
 
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      backgroundColor: theme.colors.color3,
+      backgroundColor: theme.colors.color2,
 
       width: percent(100),
       height: percent(100),
@@ -88,26 +88,32 @@ export function ArticleBlock(props: ArticleBlockProps) {
     }
   ])
 
-  const footerClassName = useThemeStyle(_theme => [
-    {
-      $debugName: debugName(ArticleBlock, 'footer'),
-      flexShrink: 0,
-      padding: em(1.4 / 2.5)
-    }
-  ])
+  const footerClassName = useThemeStyle(_theme => ({
+    $debugName: debugName(ArticleBlock, 'footer'),
+    display: 'flex',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    flexShrink: 0,
+    padding: em(1.4 / 2.5),
+    paddingTop: 0
+  }))
 
-  const timeClassName = useThemeStyle(theme => [
-    {
-      $debugName: debugName(ArticleBlock, 'time'),
-      display: 'inline-block',
-      float: 'right',
-      border: `${px(1)} solid ${theme.colors.color5}`,
-      borderRadius: em(0.3),
-      padding: `${em(0.5)} ${em(0.5)}`,
-      fontSize: em(0.5),
-      color: theme.colors.primaryTextColor
-    }
-  ])
+  const platformClassName = useThemeStyle(theme => ({
+    flexGrow: 1,
+    fontSize: em(0.5),
+    color: theme.colors.primaryTextColor
+  }))
+
+  const timeClassName = useThemeStyle(theme => ({
+    $debugName: debugName(ArticleBlock, 'time'),
+    display: 'inline-block',
+    float: 'right',
+    border: `${px(1)} solid ${theme.colors.color5}`,
+    borderRadius: em(0.3),
+    padding: `${em(0.5)} ${em(0.5)}`,
+    fontSize: em(0.5),
+    color: theme.colors.primaryTextColor
+  }))
 
   const localeContext = useContext(LocaleContext)
 
@@ -133,6 +139,7 @@ export function ArticleBlock(props: ArticleBlockProps) {
             )}
             <div className={contentClassName}>{props.article.title}</div>
             <div className={footerClassName}>
+              <div className={platformClassName}>{props.article.platform}</div>
               <time
                 className={timeClassName}
                 dateTime={props.article.published.toISOString()}>

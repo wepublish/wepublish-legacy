@@ -21,7 +21,12 @@ function viewForRoute(route: Route): ReactNode {
       return <FrontView blocks={route.blocks} />
 
     case RouteType.Article:
-      return <ArticleView article={route.article} />
+      return (
+        <ArticleView
+          article={route.article}
+          relatedArticles={route.relatedArticles}
+        />
+      )
 
     case RouteType.InternalServerError:
       return <InternalServerErrorView />

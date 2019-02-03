@@ -15,7 +15,15 @@ export const clientConfig: webpack.Configuration = {
     extensions: ['.ts', '.tsx', '.js']
   },
   module: {
-    rules: [{test: /\.tsx?$/, loader: 'ts-loader'}]
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          configFile: path.resolve(__dirname, './tsconfig.client.json')
+        }
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({

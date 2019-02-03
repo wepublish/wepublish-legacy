@@ -1,4 +1,4 @@
-import {Article, ListArticle} from '@wepublish/common'
+import {Article, ListArticle, shuffleArray} from '@wepublish/common'
 import {Remote, UserSession, PermissionDeniedError} from '@karma.run/sdk'
 import * as xpr from '@karma.run/sdk/expression'
 
@@ -104,6 +104,16 @@ export class KarmaDataSource implements DataSource {
       console.error(err)
       throw err
     }
+  }
+
+  public async getRelatedArticles(_id: string): Promise<ListArticle[]> {
+    const today = new Date()
+    const twoWeeksAgo = new Date()
+
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14)
+
+    const articles = await this.getArticles(today, twoWeeksAgo)
+    return shuffleArray(articles).slice(0, 4)
   }
 
   // TODO: Caching

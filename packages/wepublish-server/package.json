@@ -1,8 +1,9 @@
 {
   "name": "@wepublish/server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "sideEffects": false,
   "license": "MIT",
   "scripts": {
     "build": "tsc --outDir ./lib --declaration --declarationMap",
@@ -13,8 +14,8 @@
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {
-    "@wepublish/common": "^0.0.0",
-    "@wepublish/ui": "^0.0.1",
+    "@wepublish/common": "^0.0.1",
+    "@wepublish/ui": "^0.0.2",
     "@karma.run/sdk": "beta",
     "fastify": "^1.13.4",
     "fastify-static": "^1.1.0",

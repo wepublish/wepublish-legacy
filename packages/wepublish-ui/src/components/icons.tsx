@@ -6,8 +6,8 @@ export function NavigationIcon() {
   const className = useThemeStyle(theme => [
     {
       $debugName: debugName(NavigationIcon),
+      display: 'block',
       height: '1em',
-      position: 'absolute',
       fill: theme.colors.primaryTextColor
     }
   ])

@@ -147,6 +147,7 @@ export class Server {
         <ApplicationView
           initialRoute={route}
           siteName={opts.siteName}
+          brandName={opts.brandName}
           talkURL={opts.talkURL}
           locale={opts.locale}
           dateLocale={opts.dateLocale}
@@ -166,6 +167,7 @@ export class Server {
         <ApplicationView
           initialRoute={route}
           siteName={opts.siteName}
+          brandName={opts.brandName}
           talkURL={opts.talkURL}
           locale={opts.locale}
           dateLocale={opts.dateLocale}
@@ -222,6 +224,10 @@ export class Server {
     return this.opts.dataSource.getArticle(id)
   }
 
+  private async getRelatedArticles(id: string): Promise<ListArticle[]> {
+    return this.opts.dataSource.getRelatedArticles(id)
+  }
+
   private async getArticles(): Promise<ListArticle[]> {
     const today = new Date()
     const twoWeeksAgo = new Date()
@@ -240,7 +246,8 @@ export class Server {
     switch (route.type) {
       case RouteType.Article: {
         const article = await this.getArticle(route.articleID)
-        return {...route, article: article}
+        const relatedArticles = await this.getRelatedArticles(route.articleID)
+        return {...route, article, relatedArticles}
       }
 
       case RouteType.Front:

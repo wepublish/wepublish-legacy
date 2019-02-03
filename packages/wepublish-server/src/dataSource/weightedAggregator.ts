@@ -1,4 +1,4 @@
-import {Article, ListArticle} from '@wepublish/common'
+import {Article, ListArticle, shuffleArray} from '@wepublish/common'
 import {DataSource} from './interface'
 
 export interface WeightedDataSource {
@@ -38,6 +38,16 @@ export class WeightedAggregatorDataSource {
       await dataSource.dataSource.getArticle(articleID),
       dataSource.id
     )
+  }
+
+  public async getRelatedArticles(_id: string): Promise<ListArticle[]> {
+    const today = new Date()
+    const twoWeeksAgo = new Date()
+
+    twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14)
+
+    const articles = await this.getArticles(today, twoWeeksAgo)
+    return shuffleArray(articles).slice(0, 4)
   }
 
   public async getArticles(from: Date, to: Date): Promise<ListArticle[]> {

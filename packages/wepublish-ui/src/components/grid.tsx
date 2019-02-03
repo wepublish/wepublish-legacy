@@ -26,6 +26,7 @@ export function GridItem(props: GridItemProps) {
         $debugName: debugName(GridItem),
         display: props.span ? 'block' : 'none',
         flexBasis: percent((props.span / gridContext.columns) * 100),
+        flexShrink: 0,
         padding: `${gridContext.unitFn(
           gridContext.spacingVertical / 2
         )} ${gridContext.unitFn(gridContext.spacingHorizontal / 2)}`

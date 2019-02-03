@@ -58,6 +58,7 @@ async function initialize(opts: ClientOptions) {
     <ApplicationView
       initialRoute={unserializeRoute(initialState.initialRoute)}
       siteName={opts.siteName}
+      brandName={opts.brandName}
       talkURL={opts.talkURL}
       locale={opts.locale}
       dateLocale={opts.dateLocale}

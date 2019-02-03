@@ -30,9 +30,7 @@ export function BrandBlock() {
   return (
     <AspectRatio ratio={8 / 9}>
       <div className={className}>
-        <div className="logo">
-          {<themeContext.logoComponent className={''} />}
-        </div>
+        {<themeContext.logoComponent className="logo" />}
       </div>
     </AspectRatio>
   )

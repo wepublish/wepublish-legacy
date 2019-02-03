@@ -1,6 +1,12 @@
 import {Trie} from 'route-trie'
 import * as qs from 'query-string'
-import {Block, Article, ArticleJSON, ListArticle} from './model'
+import {
+  Block,
+  Article,
+  ArticleJSON,
+  ListArticle,
+  ListArticleJSON
+} from './model'
 
 export enum RouteType {
   NotFound = 'notFound',
@@ -19,6 +25,7 @@ export interface ArticleRoute {
   titleSlug: string
   articleID: string
   article?: Article
+  relatedArticles?: ListArticle[]
 }
 
 export interface NotFoundRoute {
@@ -39,6 +46,7 @@ export interface ArticleRouteJSON {
   titleSlug: string
   articleID: string
   article?: ArticleJSON
+  relatedArticles?: ListArticleJSON[]
 }
 
 export type Route =
@@ -100,7 +108,15 @@ export function reverseRoute(route: Route): string {
 export function unserializeRoute(json: RouteJSON): Route {
   switch (json.type) {
     case RouteType.Article:
-      return {...json, article: json.article && Article.fromJSON(json.article)}
+      return {
+        ...json,
+        article: json.article && Article.fromJSON(json.article),
+        relatedArticles:
+          json.relatedArticles &&
+          json.relatedArticles.map(articleJSON =>
+            ListArticle.fromJSON(articleJSON)
+          )
+      }
 
     case RouteType.Front:
       return {

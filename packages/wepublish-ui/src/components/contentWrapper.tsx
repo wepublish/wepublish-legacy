@@ -1,10 +1,13 @@
-import React, {ReactNode} from 'react'
+import React, {ReactNode, useContext} from 'react'
 import {useThemeStyle, useTheme, useStyle} from '../context/themeContext'
 
 import {NavigationIcon} from './icons'
 import {media} from 'typestyle'
 import {em, rem, viewHeight, px} from 'csx'
 import {debugName, zIndex, mediaQueries} from '../style'
+import {Link} from './link'
+import {RouteType} from '@wepublish/common'
+import {AppContext} from '../context/appContext'
 
 export interface ContentWrapperProps {
   children: ReactNode
@@ -42,14 +45,14 @@ export function ContentWrapper(props: ContentWrapperProps) {
       maxHeight: viewHeight(100),
       borderBottom: 'none',
       borderRight: `${px(1)} solid ${theme.colors.color4}`,
-      padding: rem(2.6)
+      padding: `${rem(2.6)} ${rem(2)}`
     }),
     media(mediaQueries.desktop, {
       flexDirection: 'column',
       maxHeight: viewHeight(100),
       borderBottom: 'none',
       borderRight: `${px(1)} solid ${theme.colors.color4}`,
-      padding: rem(2.6)
+      padding: `${rem(2.6)} ${rem(2)}`
     })
   ])
 
@@ -88,30 +91,46 @@ export function ContentWrapper(props: ContentWrapperProps) {
     $debugName: debugName(ContentWrapper, 'content'),
 
     display: 'flex',
+    flexDirection: 'column',
     flexGrow: 1
   }))
 
-  const footerClassName = useThemeStyle(theme => ({
-    $debugName: debugName(ContentWrapper, 'footer'),
+  const footerClassName = useThemeStyle(theme => [
+    {
+      $debugName: debugName(ContentWrapper, 'footer'),
 
-    display: 'flex',
-    backgroundColor: theme.colors.color1
-  }))
+      display: 'flex',
+      color: theme.colors.color1,
+      backgroundColor: theme.colors.color7,
+      fontSize: em(1),
+      padding: `${em(1.5)} ${em(2.5)}`
+    },
+    media(mediaQueries.tablet, {
+      fontSize: em(1.4)
+    }),
+    media(mediaQueries.desktop, {
+      fontSize: em(1.6)
+    })
+  ])
 
   const logo = useTheme(theme => (
     <theme.logoComponent className={logoClassName} />
   ))
 
+  const appContext = useContext(AppContext)
+
   return (
     <div className={className}>
       <div className={contentWrapperClassName}>
         <header className={headerClassName}>
-          <NavigationIcon />
+          <Link route={{type: RouteType.Front}}>
+            <NavigationIcon />
+          </Link>
           {logo}
         </header>
         <div className={contentClassName}>{props.children}</div>
       </div>
-      <footer className={footerClassName} />
+      <footer className={footerClassName}>© {appContext.brandName}</footer>
     </div>
   )
 }

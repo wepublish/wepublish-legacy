@@ -1,12 +1,13 @@
-import React, {useMemo, useContext, ReactNode} from 'react'
+import React, {useMemo, useContext, ReactNode, useState} from 'react'
 import {
   Article,
   capitalizeFirst,
   ArticleRoute,
   RouteType,
-  slugify
+  slugify,
+  ListArticle
 } from '@wepublish/common'
-import {rem, percent, em} from 'csx'
+import {rem, percent, em, px} from 'csx'
 import {formatRelative} from 'date-fns'
 
 import {useThemeStyle, useStyle} from '../context/themeContext'
@@ -21,9 +22,11 @@ import {
   FacebookShareButton,
   EmailShareButton
 } from '../components/shareButton'
+import {Link} from '../components/link'
 
 export interface ArticleViewProps {
   article?: Article
+  relatedArticles?: ListArticle[]
 }
 
 const fullGridItemProps = {
@@ -44,13 +47,9 @@ export function ArticleView(props: ArticleViewProps) {
   if (!props.article) return null
 
   const localeContext = useContext(LocaleContext)
-  const className = useThemeStyle(theme => [
+  const articleClassName = useStyle(() => [
     {
       $debugName: debugName(ArticleView),
-      backgroundColor: theme.colors.color1,
-      overflow: 'hidden',
-      maxWidth: rem(128),
-      margin: '0 auto',
 
       $nest: {
         h1: {
@@ -89,15 +88,20 @@ export function ArticleView(props: ArticleViewProps) {
         },
         p: {
           fontSize: em(1.8),
+          lineHeight: 1.5,
+          margin: `${em(1.5 / 1.8)} 0`
+        },
+        ul: {
+          fontSize: em(1.8),
+          margin: 0,
+          marginLeft: em(1)
+        },
+        li: {
           margin: `${em(1.5 / 1.8)} 0`
         },
         img: {
           width: percent(100),
           margin: `${em(1.5)} 0`
-        },
-        'a, a:link, a:visited, a:hover, a:visited': {
-          color: theme.colors.linkColor,
-          textDecoration: 'underline'
         }
       }
     },
@@ -106,11 +110,7 @@ export function ArticleView(props: ArticleViewProps) {
       $nest: {
         p: {
           fontSize: em(2.2),
-          margin: `${em(1.5 / 2.2)} 0`,
-
-          $nest: {
-            '&:first-child': {marginTop: 0}
-          }
+          margin: `${em(1.5 / 2.2)} 0`
         }
       }
     }),
@@ -122,9 +122,24 @@ export function ArticleView(props: ArticleViewProps) {
     })
   ])
 
-  const wrapperClassName = useStyle(() => ({
-    $debugName: debugName(ArticleView, 'wrapper'),
-    padding: `${percent(4)} ${percent(3)}`
+  const articleContentWrapperClassName = useThemeStyle(theme => ({
+    $debugName: debugName(ArticleView, 'contentWrapper'),
+    backgroundColor: theme.colors.color1,
+    overflow: 'hidden',
+    maxWidth: rem(128),
+    margin: '0 auto'
+  }))
+
+  const articleContentClassName = useThemeStyle(theme => ({
+    $debugName: debugName(ArticleView, 'content'),
+    padding: `${percent(4)} ${percent(3)}`,
+
+    $nest: {
+      '& p a, & p a:link, & p a:visited, & p a:hover, & p a:visited': {
+        color: theme.colors.linkColor,
+        textDecoration: 'underline'
+      }
+    }
   }))
 
   const dateAndAuthorClassName = useThemeStyle(theme => ({
@@ -166,6 +181,54 @@ export function ArticleView(props: ArticleViewProps) {
     }
   }))
 
+  const articleFooterClassName = useThemeStyle(theme => ({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontSize: em(1.8),
+    color: theme.colors.primaryTextColor,
+    borderTop: `${px(1)} solid ${theme.colors.color4}`,
+    marginTop: em(3),
+    paddingTop: em(1),
+    paddingRight: em(2),
+
+    $nest: {
+      '> .comments': {
+        flexGrow: 1,
+        textDecoration: 'underline'
+      },
+
+      '> .share': {
+        display: 'flex',
+        flexDirection: 'row',
+        fontSize: em(3),
+        $nest: {
+          a: {marginLeft: em(2.5 / 7)}
+        }
+      }
+    }
+  }))
+
+  const relatedArticlesWrapperClassName = useThemeStyle(theme => ({
+    backgroundColor: theme.colors.color2
+  }))
+
+  const relatedArticlesClassName = useStyle(() => ({
+    overflow: 'hidden',
+    maxWidth: rem(128),
+    margin: '0 auto'
+  }))
+
+  const relatedArticlesContentClassName = useStyle(() => ({
+    padding: `${percent(5)} ${percent(3)}`
+  }))
+
+  const relatedArticlesTitleClassName = useThemeStyle(theme => ({
+    color: theme.colors.color3,
+    fontSize: em(3),
+    marginBottom: em(3 / 3)
+  }))
+
   const elements = useMemo(
     () => {
       const value = props.article!.content
@@ -175,6 +238,8 @@ export function ArticleView(props: ArticleViewProps) {
     [props.article.content]
   )
 
+  const [commentsVisible, setCommentsVisible] = useState(false)
+
   const shareRoute: ArticleRoute = {
     type: RouteType.Article,
     articleID: props.article.id,
@@ -183,63 +248,143 @@ export function ArticleView(props: ArticleViewProps) {
   }
 
   return (
-    <article className={className}>
-      <div className={wrapperClassName}>
-        <Grid
-          spacingHorizontal={0}
-          spacingVertical={0}
-          columns={14}
-          unitFn={rem}>
-          <GridRow tag="header">
-            <GridItem {...fullGridItemProps}>
-              <div className={platformAndShareClassName}>
-                <div className="platform">{props.article.platform}</div>
-                <div className="share">
-                  <FacebookShareButton route={shareRoute} />
-                  <TwitterShareButton route={shareRoute} />
-                  <EmailShareButton route={shareRoute} />
+    <article className={articleClassName}>
+      <div className={articleContentWrapperClassName}>
+        <div className={articleContentClassName}>
+          <Grid
+            spacingHorizontal={0}
+            spacingVertical={0}
+            columns={14}
+            unitFn={rem}>
+            <GridRow tag="header">
+              <GridItem {...fullGridItemProps}>
+                <div className={platformAndShareClassName}>
+                  <div className="platform">{props.article.platform}</div>
+                  <div className="share">
+                    <FacebookShareButton route={shareRoute} />
+                    <TwitterShareButton route={shareRoute} />
+                    <EmailShareButton route={shareRoute} />
+                  </div>
                 </div>
-              </div>
-            </GridItem>
-
-            <GridItem tag="h1" {...wideGridItemProps}>
-              {props.article.title}
-            </GridItem>
-
-            {props.article.description && (
-              <GridItem tag="p" className="description" {...wideGridItemProps}>
-                {props.article.description}
               </GridItem>
-            )}
 
-            <GridItem {...wideGridItemProps} className={dateAndAuthorClassName}>
-              <time dateTime={props.article.published.toISOString()}>
-                {capitalizeFirst(
-                  formatRelative(props.article.published, new Date(), {
-                    locale: localeContext.dateLocale
-                  })
-                )}
-              </time>
-              {' - '}
-              <address>{props.article.author}</address>
-            </GridItem>
-          </GridRow>
-          <GridRow>
-            {props.article.image && (
-              <GridItem {...wideGridItemProps}>
-                <img src={props.article.image} />
+              <GridItem tag="h1" {...wideGridItemProps}>
+                {props.article.title}
               </GridItem>
+
+              {props.article.description && (
+                <GridItem
+                  tag="p"
+                  className="description"
+                  {...wideGridItemProps}>
+                  {props.article.description}
+                </GridItem>
+              )}
+
+              <GridItem
+                {...wideGridItemProps}
+                className={dateAndAuthorClassName}>
+                <time dateTime={props.article.published.toISOString()}>
+                  {capitalizeFirst(
+                    formatRelative(props.article.published, new Date(), {
+                      locale: localeContext.dateLocale
+                    })
+                  )}
+                </time>
+                {' - '}
+                <address>{props.article.author}</address>
+              </GridItem>
+            </GridRow>
+            <GridRow>
+              {props.article.image && (
+                <GridItem {...wideGridItemProps}>
+                  <img src={props.article.image} />
+                </GridItem>
+              )}
+            </GridRow>
+            {elements}
+            <GridRow>
+              <GridItem tag="footer" {...smallGridItemProps}>
+                <div className={articleFooterClassName}>
+                  <div className="comments">
+                    <a onClick={() => setCommentsVisible(true)}>Kommentare</a>
+                  </div>
+                  <div className="share">
+                    <FacebookShareButton route={shareRoute} />
+                    <TwitterShareButton route={shareRoute} />
+                    <EmailShareButton route={shareRoute} />
+                  </div>
+                </div>
+              </GridItem>
+            </GridRow>
+            {commentsVisible && (
+              <GridRow>
+                <GridItem {...wideGridItemProps}>
+                  <CommentSection articleID={props.article.id} />
+                </GridItem>
+              </GridRow>
             )}
-          </GridRow>
-          {elements}
-          <GridRow>
-            <GridItem {...wideGridItemProps}>
-              <CommentSection articleID={props.article.id} />
-            </GridItem>
-          </GridRow>
-        </Grid>
+          </Grid>
+        </div>
       </div>
+      {props.relatedArticles && (
+        <div className={relatedArticlesWrapperClassName}>
+          <div className={relatedArticlesClassName}>
+            <section className={relatedArticlesContentClassName}>
+              <div className={relatedArticlesTitleClassName}>
+                Weitere Artikel in dieser Rubrik
+              </div>
+              <Grid
+                spacingHorizontal={3}
+                spacingVertical={3}
+                columns={4}
+                unitFn={percent}>
+                <GridRow>
+                  {props.relatedArticles.map(article => (
+                    <GridItem
+                      key={article.id}
+                      span={4}
+                      spanBreakpoints={{[breakpoint.tablet]: 1}}>
+                      <RelatedArticleBlock article={article} />
+                    </GridItem>
+                  ))}
+                </GridRow>
+              </Grid>
+            </section>
+          </div>
+        </div>
+      )}
     </article>
+  )
+}
+
+export interface RelatedArticleBlockProps {
+  article: ListArticle
+}
+
+export function RelatedArticleBlock(props: RelatedArticleBlockProps) {
+  const className = useThemeStyle(theme => ({
+    display: 'block',
+    overflow: 'hidden',
+    boxSizing: 'content-box',
+    textDecoration: 'none',
+    fontSize: em(2),
+    color: theme.colors.color1,
+    backgroundColor: theme.colors.color6,
+    height: em(6),
+    padding: `${percent(10)} ${percent(6)}`
+  }))
+
+  const route: ArticleRoute = {
+    type: RouteType.Article,
+    articleID: props.article.id,
+    titleSlug: slugify(props.article.title)
+  }
+
+  return (
+    <Link route={route} className={className}>
+      {props.article.title}
+    </Link>
   )
 }
 

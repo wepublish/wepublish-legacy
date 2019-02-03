@@ -34,11 +34,13 @@ export function CommentSection(props: CommentSectionProps) {
       document.head.appendChild(scriptEl)
       insertedTalkScript = true
     } else {
-      Coral.Talk.render(talkContainer.current, {
-        talk: appContext.talkURL,
-        asset_id: props.articleID,
-        lazy: true
-      })
+      if (typeof Coral != 'undefined') {
+        Coral.Talk.render(talkContainer.current, {
+          talk: appContext.talkURL,
+          asset_id: props.articleID,
+          lazy: true
+        })
+      }
     }
   }, [])
 

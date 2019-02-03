@@ -18,10 +18,11 @@ export function CommonShareButton(props: CommonShareButtonProps) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: theme.colors.primaryTextColor,
     fontSize: em(0.5),
     width: em(1 / 0.5),
     height: em(1 / 0.5),
-    border: `${px(1)} solid ${theme.colors.color5}`,
+    border: `${px(1)} solid ${theme.colors.primaryTextColor}`,
     borderRadius: percent(50),
 
     $nest: {

@@ -29,6 +29,7 @@ export const brandTheme = {
 
 export const configuration = {
   siteName: 'we.publish example',
+  brandName: 'we.publish',
   talkURL: process.env.TALK_URL!,
   locale: 'de',
   dateLocale: de,
