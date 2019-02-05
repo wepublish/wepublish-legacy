@@ -26,5 +26,11 @@ wepublish.startServer({
       ),
       weight: 0.5
     }
-  )
+  ),
+  icons: {
+    '16x16': './icons/16x16.png',
+    '32x32': './icons/32x32.png',
+    '192x192': './icons/192x192.png',
+    '512x512': './icons/512x512.png'
+  }
 })

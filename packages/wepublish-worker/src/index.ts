@@ -8,7 +8,14 @@ const cacheKey = `wepublish-cache-v${version}`
 
 async function cacheCoreResources() {
   const cache = await caches.open(cacheKey)
-  return cache.addAll(['/', '/static/client.js'])
+  return cache.addAll([
+    '/',
+    '/static/client.js',
+    '/static/icon-16x16.png',
+    '/static/icon-32x32.png',
+    '/static/icon-192x192.png',
+    '/static/icon-512x512.png'
+  ])
 }
 
 let currentCache: Cache | undefined

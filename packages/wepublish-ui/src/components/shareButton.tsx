@@ -22,10 +22,14 @@ export function CommonShareButton(props: CommonShareButtonProps) {
     fontSize: em(0.5),
     width: em(1 / 0.5),
     height: em(1 / 0.5),
-    border: `${px(1)} solid ${theme.colors.primaryTextColor}`,
+    border: `${px(1)} solid ${theme.colors.color3}`,
     borderRadius: percent(50),
 
     $nest: {
+      '> .icon': {
+        height: em(1)
+      },
+
       '&:hover': {
         backgroundColor: theme.colors.color3
       },
@@ -56,7 +60,7 @@ export function FacebookShareButton(props: ShareButtonProps) {
       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
         url
       )}`}>
-      <FacebookIcon />
+      <FacebookIcon className="icon" />
     </CommonShareButton>
   )
 }
@@ -68,7 +72,7 @@ export function TwitterShareButton(props: ShareButtonProps) {
   return (
     <CommonShareButton
       href={`https://twitter.com/home?status==${encodeURIComponent(url)}`}>
-      <TwitterIcon />
+      <TwitterIcon className="icon" />
     </CommonShareButton>
   )
 }
@@ -79,7 +83,7 @@ export function EmailShareButton(props: ShareButtonProps) {
 
   return (
     <CommonShareButton href={`mailto:?body=${encodeURIComponent(url)}`}>
-      <EmailIcon />
+      <EmailIcon className="icon" />
     </CommonShareButton>
   )
 }

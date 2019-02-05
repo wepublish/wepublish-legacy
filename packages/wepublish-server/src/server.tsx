@@ -3,6 +3,7 @@ import fs from 'fs'
 
 import fastify from 'fastify'
 import fastifyCompress from 'fastify-compress'
+import fastifyCaching from 'fastify-caching'
 
 import React from 'react'
 import ReactDOM from 'react-dom/server'
@@ -31,6 +32,12 @@ export interface ServerOptions extends ApplicationOptions {
   readonly dataSource: DataSource
   readonly clientPath: string
   readonly workerPath: string
+  readonly icons: {
+    '16x16': string
+    '32x32': string
+    '192x192': string
+    '512x512': string
+  }
 }
 
 export class Server {
@@ -45,6 +52,10 @@ export class Server {
     })
 
     this.httpServer.register(fastifyCompress)
+    this.httpServer.register(fastifyCaching, {
+      privacy: fastifyCaching.privacy.PUBLIC,
+      expiresIn: 60 * 60
+    })
 
     let clientPath = opts.clientPath
     let workerPath = opts.workerPath
@@ -100,19 +111,38 @@ export class Server {
       })
     }
 
+    this.httpServer.get('/static/icon-16x16.png', async (_req, res) => {
+      res.header('Content-Type', 'image/png')
+      return fs.createReadStream(opts.icons['16x16'])
+    })
+
+    this.httpServer.get('/static/icon-32x32.png', async (_req, res) => {
+      res.header('Content-Type', 'image/png')
+      return fs.createReadStream(opts.icons['32x32'])
+    })
+
+    this.httpServer.get('/static/icon-192x192.png', async (_req, res) => {
+      res.header('Content-Type', 'image/png')
+      return fs.createReadStream(opts.icons['192x192'])
+    })
+
+    this.httpServer.get('/static/icon-512x512.png', async (_req, res) => {
+      res.header('Content-Type', 'image/png')
+      return fs.createReadStream(opts.icons['512x512'])
+    })
+
     this.httpServer.get('/manifest.json', async (_req, _res) => {
-      // TODO: Config
       return {
-        short_name: 'Test',
-        name: 'Test',
+        short_name: opts.siteName,
+        name: opts.siteName,
         icons: [
           {
-            src: '/images/icons-192.png',
+            src: '/static/icon-192x192.png',
             type: 'image/png',
             sizes: '192x192'
           },
           {
-            src: '/images/icons-512.png',
+            src: '/static/icon-512x512.png',
             type: 'image/png',
             sizes: '512x512'
           }
@@ -147,6 +177,7 @@ export class Server {
         <ApplicationView
           initialRoute={route}
           siteName={opts.siteName}
+          siteDescription={opts.siteDescription}
           brandName={opts.brandName}
           talkURL={opts.talkURL}
           locale={opts.locale}
@@ -167,6 +198,7 @@ export class Server {
         <ApplicationView
           initialRoute={route}
           siteName={opts.siteName}
+          siteDescription={opts.siteDescription}
           brandName={opts.brandName}
           talkURL={opts.talkURL}
           locale={opts.locale}
@@ -192,7 +224,23 @@ export class Server {
         <head>
           {extractMetadata()}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/static/icon-16x16.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/static/icon-32x32.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="192x192"
+            href="/static/icon-192x192.png"
+          />
           <link rel="manifest" href="/manifest.json" />
           <link
             href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i"

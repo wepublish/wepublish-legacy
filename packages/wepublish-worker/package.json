@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/worker",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "watch": "tsc --outDir ./lib --declaration --declarationMap --watch",
     "copy:license": "shx cp ../../LICENSE ./",
     "clean": "shx rm -rf ./LICENSE ./lib",
-    "prepare": "run-s clean copy:license build sync-package-info",
+    "prepare": "run-s clean build copy:license sync-package-info",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "devDependencies": {

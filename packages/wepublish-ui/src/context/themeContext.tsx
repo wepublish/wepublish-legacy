@@ -28,7 +28,7 @@ export const defaultTheme: Theme = {
   colors: {
     color1: '#FFFFFF',
     color2: '#F9F9F9',
-    color3: '#CCCCCC',
+    color3: '#BBBBBB',
     color4: '#ECECEC',
     color5: '#979797',
     color6: '#454545',
@@ -43,7 +43,7 @@ export type ThemeContext = Theme
 export const ThemeContext = React.createContext<ThemeContext>(defaultTheme)
 
 export interface StaticThemeContextProviderProps {
-  theme?: Theme
+  theme?: Partial<Theme>
 }
 
 export class StaticThemeContextProvider extends React.Component<
@@ -52,7 +52,7 @@ export class StaticThemeContextProvider extends React.Component<
 > {
   public constructor(props: StaticThemeContextProviderProps) {
     super(props)
-    this.state = this.props.theme || defaultTheme
+    this.state = {...defaultTheme, ...props.theme}
   }
 
   public render(): React.ReactNode {

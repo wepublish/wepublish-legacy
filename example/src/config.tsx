@@ -1,7 +1,6 @@
 import React from 'react'
 import {de} from 'date-fns/locale'
 import {LogoProps} from '@wepublish/ui'
-import {rgba} from 'csx'
 
 export function BrandLogo(props: LogoProps) {
   return (
@@ -12,23 +11,12 @@ export function BrandLogo(props: LogoProps) {
 }
 
 export const brandTheme = {
-  logoComponent: BrandLogo,
-  colors: {
-    color1: '#FFFFFF',
-    color2: '#F9F9F9',
-    color3: '#CCCCCC',
-    color4: '#ECECEC',
-    color5: '#979797',
-    color6: '#454545',
-    color7: '#000000',
-    linkColor: '#222222',
-    primaryTextColor: '#222222',
-    shadowColor: rgba(170, 170, 170, 0.3).toString()
-  }
+  logoComponent: BrandLogo
 }
 
 export const configuration = {
   siteName: 'we.publish example',
+  siteDescription: 'we.publish example',
   brandName: 'we.publish',
   talkURL: process.env.TALK_URL!,
   locale: 'de',

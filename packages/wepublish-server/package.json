@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "sideEffects": false,
@@ -10,16 +10,17 @@
     "watch": "tsc --outDir ./lib --declaration --declarationMap --watch",
     "copy:license": "shx cp ../../LICENSE ./",
     "clean": "shx rm -rf ./LICENSE ./lib",
-    "prepare": "run-s clean copy:license build sync-package-info",
+    "prepare": "run-s clean build copy:license sync-package-info",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {
     "@wepublish/common": "^0.0.1",
-    "@wepublish/ui": "^0.0.2",
+    "@wepublish/ui": "^0.0.3",
     "@karma.run/sdk": "beta",
     "fastify": "^1.13.4",
     "fastify-static": "^1.1.0",
     "fastify-compress": "^0.8.0",
+    "fastify-caching": "^3.0.0",
     "react": "^16.8.0-alpha.1",
     "react-dom": "^16.8.0-alpha.1"
   },

@@ -18,6 +18,7 @@ export function ApplicationView(props: ApplicationViewProps) {
   return (
     <StaticAppContextProvider
       siteName={props.siteName}
+      siteDescription={props.siteDescription}
       brandName={props.brandName}
       talkURL={props.talkURL}
       hostname={props.hostname}>

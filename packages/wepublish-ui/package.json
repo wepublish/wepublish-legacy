@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./lib/cjs/index.js",
   "module": "./lib/es6/index.js",
   "types": "./lib/types/index.d.ts",
@@ -18,7 +18,7 @@
     "copy:license": "shx cp ../../LICENSE ./",
     "clean": "shx rm -rf ./LICENSE ./lib",
     "clean:es6": "shx rm -rf ./lib/es6",
-    "prepare": "run-s clean copy:license build sync-package-info",
+    "prepare": "run-s build copy:license sync-package-info",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {

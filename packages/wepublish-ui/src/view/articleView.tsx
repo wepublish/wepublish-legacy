@@ -109,8 +109,16 @@ export function ArticleView(props: ArticleViewProps) {
       fontSize: rem(0.5),
       $nest: {
         p: {
-          fontSize: em(2.2),
-          margin: `${em(1.5 / 2.2)} 0`
+          fontSize: em(2.8),
+          margin: `${em(1.5 / 2.8)} 0`
+        },
+        ul: {
+          fontSize: em(2.8),
+          margin: 0,
+          marginLeft: em(1)
+        },
+        li: {
+          margin: `${em(1.5 / 2.8)} 0`
         }
       }
     }),
@@ -142,72 +150,92 @@ export function ArticleView(props: ArticleViewProps) {
     }
   }))
 
-  const dateAndAuthorClassName = useThemeStyle(theme => ({
-    $debugName: debugName(ArticleView, 'dateAndAuthor'),
+  const dateAndAuthorClassName = useThemeStyle(theme => [
+    {
+      $debugName: debugName(ArticleView, 'dateAndAuthor'),
 
-    fontSize: em(1.8),
-    margin: `${em(1.5 / 1.8)} 0`,
-    color: theme.colors.color3,
+      fontSize: em(1.8),
+      margin: `${em(1.5 / 1.8)} 0`,
+      color: theme.colors.color3,
 
-    $nest: {
-      '> address': {
-        display: 'inline'
-      }
-    }
-  }))
-
-  const platformAndShareClassName = useThemeStyle(theme => ({
-    $debugName: debugName(ArticleView, 'platformAndShare'),
-
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    fontSize: em(1.8),
-    color: theme.colors.color3,
-
-    $nest: {
-      '> .platform': {
-        flexGrow: 1
-      },
-
-      '> .share': {
-        display: 'flex',
-        flexDirection: 'row',
-        fontSize: em(7 / 1.8),
-        $nest: {
-          a: {marginLeft: em(2.5 / 7)}
+      $nest: {
+        '> address': {
+          display: 'inline'
         }
       }
-    }
-  }))
+    },
+    media(mediaQueries.mobile, {
+      fontSize: em(2.4)
+    })
+  ])
 
-  const articleFooterClassName = useThemeStyle(theme => ({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    fontSize: em(1.8),
-    color: theme.colors.primaryTextColor,
-    borderTop: `${px(1)} solid ${theme.colors.color4}`,
-    marginTop: em(3),
-    paddingTop: em(1),
-    paddingRight: em(2),
+  const platformAndShareClassName = useThemeStyle(theme => [
+    {
+      $debugName: debugName(ArticleView, 'platformAndShare'),
 
-    $nest: {
-      '> .comments': {
-        flexGrow: 1,
-        textDecoration: 'underline'
-      },
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      fontSize: em(1.8),
+      color: theme.colors.color3,
 
-      '> .share': {
-        display: 'flex',
-        flexDirection: 'row',
-        fontSize: em(3),
-        $nest: {
-          a: {marginLeft: em(2.5 / 7)}
+      $nest: {
+        '> .platform': {
+          flexGrow: 1
+        },
+
+        '> .share': {
+          display: 'flex',
+          flexDirection: 'row',
+          fontSize: em(7 / 1.8),
+          $nest: {
+            a: {marginLeft: em(2.5 / 7)}
+          }
         }
       }
-    }
-  }))
+    },
+    media(mediaQueries.mobile, {
+      fontSize: em(2.4),
+      $nest: {
+        '> .share': {
+          fontSize: em(7 / 2.4)
+        }
+      }
+    })
+  ])
+
+  const articleFooterClassName = useThemeStyle(theme => [
+    {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      fontSize: em(1.8),
+      color: theme.colors.primaryTextColor,
+      borderTop: `${px(1)} solid ${theme.colors.color4}`,
+      marginTop: em(3),
+      paddingTop: em(1),
+      paddingRight: em(2),
+
+      $nest: {
+        '> .comments': {
+          flexGrow: 1,
+          textDecoration: 'underline'
+        },
+
+        '> .share': {
+          display: 'flex',
+          flexDirection: 'row',
+          fontSize: em(3),
+          $nest: {
+            a: {marginLeft: em(2.5 / 7)}
+          }
+        }
+      }
+    },
+    media(mediaQueries.mobile, {
+      fontSize: em(2.4)
+    })
+  ])
 
   const relatedArticlesWrapperClassName = useThemeStyle(theme => ({
     backgroundColor: theme.colors.color2
@@ -363,17 +391,25 @@ export interface RelatedArticleBlockProps {
 }
 
 export function RelatedArticleBlock(props: RelatedArticleBlockProps) {
-  const className = useThemeStyle(theme => ({
-    display: 'block',
-    overflow: 'hidden',
-    boxSizing: 'content-box',
-    textDecoration: 'none',
-    fontSize: em(2),
-    color: theme.colors.color1,
-    backgroundColor: theme.colors.color6,
-    height: em(6),
-    padding: `${percent(10)} ${percent(6)}`
-  }))
+  const className = useThemeStyle(theme => [
+    {
+      $debugName: debugName(RelatedArticleBlock),
+
+      display: 'block',
+      overflow: 'hidden',
+      boxSizing: 'content-box',
+      textDecoration: 'none',
+      fontSize: em(2),
+      color: theme.colors.color1,
+      backgroundColor: theme.colors.color6,
+      height: em(6),
+      padding: `${percent(10)} ${percent(6)}`
+    },
+    media(mediaQueries.mobile, {
+      fontSize: em(2.4),
+      height: em(4)
+    })
+  ])
 
   const route: ArticleRoute = {
     type: RouteType.Article,

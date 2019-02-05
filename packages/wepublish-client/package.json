@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./lib/cjs/index.js",
   "module": "./lib/es6/index.js",
   "types": "./lib/types/index.d.ts",
@@ -18,12 +18,12 @@
     "copy:license": "shx cp ../../LICENSE ./",
     "clean": "shx rm -rf ./LICENSE ./lib",
     "clean:es6": "shx rm -rf ./lib/es6",
-    "prepare": "run-s clean copy:license build sync-package-info",
+    "prepare": "run-s build copy:license sync-package-info",
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {
     "@wepublish/common": "^0.0.1",
-    "@wepublish/ui": "^0.0.2",
+    "@wepublish/ui": "^0.0.3",
     "react": "^16.8.0-alpha.1",
     "react-dom": "^16.8.0-alpha.1"
   },

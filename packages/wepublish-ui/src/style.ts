@@ -55,15 +55,20 @@ export const zIndex = {
 }
 
 export function debugName(
-  component: React.FunctionComponent<any>,
+  component: React.FunctionComponent<any> | string,
   suffix?: string
 ): string | undefined {
   if (process.env.NODE_ENV !== 'production') {
+    const name =
+      typeof component === 'string'
+        ? component
+        : component.displayName || component.name
+
     if (suffix) {
-      return `${component.displayName || component.name}_${suffix}`
+      return `${name}_${suffix}`
     }
 
-    return component.displayName || component.name
+    return name
   }
 
   return undefined

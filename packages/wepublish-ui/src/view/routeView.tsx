@@ -57,7 +57,8 @@ export function MetadataRouteView(): JSX.Element | null {
       metadataForRoute(
         routeContext.route,
         appContext.hostname,
-        appContext.siteName
+        appContext.siteName,
+        appContext.siteDescription
       ),
       document.head
     )
@@ -66,6 +67,7 @@ export function MetadataRouteView(): JSX.Element | null {
       routeContext.route,
       appContext.hostname,
       appContext.siteName,
+      appContext.siteDescription,
       true
     )
   }
@@ -86,6 +88,7 @@ export function metadataForRoute(
   route: Route,
   hostname: string,
   titleFallback: string,
+  descriptionFallback: string,
   serverRender: boolean = false // TODO: Find better solution
 ): ReactNode {
   const canonicalURL = `${hostname}${reverseRoute(route)}`
@@ -101,6 +104,7 @@ export function metadataForRoute(
                 {titleForRoute(route, titleFallback)}
               </title>
             )}
+            <meta name="description" content={route.article.description} />
             <meta
               property="og:type"
               content="article"
@@ -148,6 +152,7 @@ export function metadataForRoute(
           {titleForRoute(route, titleFallback)}
         </title>
       )}
+      <meta name="description" content={descriptionFallback} />
     </React.Fragment>
   )
 }

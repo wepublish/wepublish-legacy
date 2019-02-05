@@ -108,7 +108,7 @@ export function ArticleBlock(props: ArticleBlockProps) {
     $debugName: debugName(ArticleBlock, 'time'),
     display: 'inline-block',
     float: 'right',
-    border: `${px(1)} solid ${theme.colors.color5}`,
+    border: `${px(1)} solid ${theme.colors.color3}`,
     borderRadius: em(0.3),
     padding: `${em(0.5)} ${em(0.5)}`,
     fontSize: em(0.5),
