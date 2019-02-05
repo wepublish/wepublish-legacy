@@ -75,6 +75,7 @@ export class KarmaDataSource implements DataSource {
   private transformArticle(article: KarmaArticle): Article {
     return Article.fromJSON({
       ...article.value.metadata,
+      id: article.id[1],
       content: {
         // TEMP: Fix document JSON format
         document: {
