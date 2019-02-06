@@ -1,5 +1,5 @@
 import {Article, ListArticle, shuffleArray} from '@wepublish/common'
-import {Remote, UserSession, PermissionDeniedError} from '@karma.run/sdk'
+import {Remote, UserSession} from '@karma.run/sdk'
 import * as xpr from '@karma.run/sdk/expression'
 
 import {DataSource} from './interface'
@@ -88,22 +88,25 @@ export class KarmaDataSource implements DataSource {
   }
 
   public async getArticle(id: string): Promise<Article> {
-    const session = await this.getSession()
-
-    try {
+    const fetchArticle = async () => {
+      const session = await this.getSession()
       const model = await session.do(xpr.tag(WepublishTags.Article))
       const article: KarmaArticle = await session.do(
         xpr.get(xpr.data(d => d.ref(model[1], id))).metarialize()
       )
       return this.transformArticle(article)
-    } catch (err) {
-      if (err instanceof PermissionDeniedError) {
-        this.clearSession()
-        return this.getArticle(id)
-      }
+    }
 
-      console.error(err)
-      throw err
+    try {
+      return await fetchArticle()
+    } catch (err) {
+      try {
+        this.clearSession()
+        return await fetchArticle()
+      } catch (err) {
+        console.error(err)
+        throw err
+      }
     }
   }
 
@@ -119,9 +122,8 @@ export class KarmaDataSource implements DataSource {
 
   // TODO: Caching
   public async getArticles(from: Date, to: Date): Promise<ListArticle[]> {
-    const session = await this.getSession()
-
-    try {
+    const fetchArticles = async () => {
+      const session = await this.getSession()
       const articles: KarmaListArticle[] = await session.do(
         xpr
           .all(xpr.tag(WepublishTags.Article))
@@ -142,14 +144,18 @@ export class KarmaDataSource implements DataSource {
       )
 
       return articles.map(article => this.transformListArticle(article))
-    } catch (err) {
-      if (err instanceof PermissionDeniedError) {
-        this.clearSession()
-        return this.getArticles(from, to)
-      }
+    }
 
-      console.error(err)
-      throw err
+    try {
+      return await fetchArticles()
+    } catch (err) {
+      try {
+        this.clearSession()
+        return await fetchArticles()
+      } catch (err) {
+        console.error(err)
+        throw err
+      }
     }
   }
 }
