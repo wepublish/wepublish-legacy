@@ -1,29 +1,23 @@
 import React, {ReactNode, useState} from 'react'
-import {Locale} from 'date-fns'
+import {Locale} from '../locale/interface'
 
 export interface LocaleContext {
-  locale: string
-  dateLocale?: Locale
+  locale: Locale
 }
 
 export const LocaleContext = React.createContext<LocaleContext>({
-  locale: 'en',
-  dateLocale: undefined
+  locale: {} as any
 })
 
 export interface StaticLocaleContextProviderProps {
-  locale?: string
-  dateLocale?: Locale
+  locale: Locale
   children?: ReactNode
 }
 
 export function StaticLocaleContextProvider(
   props: StaticLocaleContextProviderProps
 ) {
-  const [locale] = useState({
-    locale: props.locale || 'en',
-    dateLocale: props.dateLocale
-  })
+  const [locale] = useState({locale: props.locale})
 
   return (
     <LocaleContext.Provider value={locale}>

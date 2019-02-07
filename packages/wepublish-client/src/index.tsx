@@ -62,7 +62,6 @@ async function initialize(opts: ClientOptions) {
       brandName={opts.brandName}
       talkURL={opts.talkURL}
       locale={opts.locale}
-      dateLocale={opts.dateLocale}
       theme={opts.theme}
       hostname={opts.hostname}
     />,

@@ -144,7 +144,7 @@ export function ArticleBlock(props: ArticleBlockProps) {
                 className={timeClassName}
                 dateTime={props.article.published.toISOString()}>
                 {formatDistanceStrict(props.article.published, new Date(), {
-                  locale: localeContext.dateLocale,
+                  locale: localeContext.locale.dateLocale,
                   addSuffix: true
                 })}
               </time>

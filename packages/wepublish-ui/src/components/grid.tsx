@@ -90,6 +90,7 @@ export interface GridContext {
   spacingHorizontal: number
   spacingVertical: number
   unitFn: (num: number) => string | number
+  noMargin?: boolean
 }
 
 export interface GridBreakpoint {
@@ -100,7 +101,8 @@ export const GridContext = React.createContext<GridContext>({
   columns: 0,
   spacingHorizontal: 0,
   spacingVertical: 0,
-  unitFn: rem
+  unitFn: rem,
+  noMargin: false
 })
 
 export interface GridProps extends GridContext {
@@ -113,9 +115,11 @@ export function Grid(props: GridProps) {
   const className = useStyle(() => [
     {
       $debugName: debugName(Grid),
-      margin: `${props.unitFn(-props.spacingVertical / 2)} ${props.unitFn(
-        -props.spacingHorizontal / 2
-      )}`
+      margin: !props.noMargin
+        ? `${props.unitFn(-props.spacingVertical / 2)} ${props.unitFn(
+            -props.spacingHorizontal / 2
+          )}`
+        : undefined
     }
   ])
 

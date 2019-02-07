@@ -23,9 +23,7 @@ export function ApplicationView(props: ApplicationViewProps) {
       talkURL={props.talkURL}
       hostname={props.hostname}>
       <HistoryRouteContextProvider initialRoute={props.initialRoute}>
-        <StaticLocaleContextProvider
-          locale={props.locale}
-          dateLocale={props.dateLocale}>
+        <StaticLocaleContextProvider locale={props.locale}>
           <StaticThemeContextProvider theme={props.theme}>
             <MetadataRouteView />
             <RouteView />

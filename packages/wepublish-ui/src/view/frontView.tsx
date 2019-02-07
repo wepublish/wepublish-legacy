@@ -6,6 +6,7 @@ import {BrandBlock} from '../block/brandBlock'
 import {Grid, GridRow, GridItem} from '../components/grid'
 import {useThemeStyle} from '../context/themeContext'
 import {breakpoint, debugName} from '../style'
+import {SupportUsBlock} from '../block/supportUsBlock'
 
 export interface FrontViewProps {
   blocks?: Block[]
@@ -46,6 +47,12 @@ export function FrontView(props: FrontViewProps) {
     data: undefined
   })
 
+  blocks.splice(5 + 1, 0, {
+    id: 'supportUs',
+    type: CoreBlockType.SupportUs,
+    data: undefined
+  })
+
   return (
     <div className={className}>
       <div className="contentWrapper">
@@ -82,6 +89,13 @@ function viewForBlock(block: Block) {
       return (
         <GridItem span={0} spanBreakpoints={{[breakpoint.tablet]: 1}}>
           <BrandBlock />
+        </GridItem>
+      )
+
+    case CoreBlockType.SupportUs:
+      return (
+        <GridItem span={3} spanBreakpoints={{[breakpoint.tablet]: 3}}>
+          <SupportUsBlock />
         </GridItem>
       )
 

@@ -181,7 +181,6 @@ export class Server {
           brandName={opts.brandName}
           talkURL={opts.talkURL}
           locale={opts.locale}
-          dateLocale={opts.dateLocale}
           theme={opts.theme}
           hostname={opts.hostname}
         />
@@ -202,7 +201,6 @@ export class Server {
           brandName={opts.brandName}
           talkURL={opts.talkURL}
           locale={opts.locale}
-          dateLocale={opts.dateLocale}
           theme={opts.theme}
           hostname={opts.hostname}
         />
@@ -220,7 +218,7 @@ export class Server {
     const componentString = ReactDOM.renderToString(component)
 
     const markup = ReactDOM.renderToStaticMarkup(
-      <html lang={this.opts.locale}>
+      <html lang={this.opts.locale.identifier}>
         <head>
           {extractMetadata()}
           <meta name="viewport" content="width=device-width, initial-scale=1" />

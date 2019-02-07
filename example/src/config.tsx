@@ -1,6 +1,5 @@
 import React from 'react'
-import {de} from 'date-fns/locale'
-import {LogoProps} from '@wepublish/ui'
+import {LogoProps, de} from '@wepublish/ui'
 
 export function BrandLogo(props: LogoProps) {
   return (
@@ -19,8 +18,7 @@ export const configuration = {
   siteDescription: 'we.publish example',
   brandName: 'we.publish',
   talkURL: process.env.TALK_URL!,
-  locale: 'de',
-  dateLocale: de,
+  locale: de,
   theme: brandTheme,
   hostname: process.env.HOSTNAME!
 }

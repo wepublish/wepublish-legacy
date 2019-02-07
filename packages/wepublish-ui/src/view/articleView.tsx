@@ -23,6 +23,7 @@ import {
   EmailShareButton
 } from '../components/shareButton'
 import {Link} from '../components/link'
+import {SupportUsBlock} from '../block/supportUsBlock'
 
 export interface ArticleViewProps {
   article?: Article
@@ -315,7 +316,7 @@ export function ArticleView(props: ArticleViewProps) {
                 <time dateTime={props.article.published.toISOString()}>
                   {capitalizeFirst(
                     formatRelative(props.article.published, new Date(), {
-                      locale: localeContext.dateLocale
+                      locale: localeContext.locale.dateLocale
                     })
                   )}
                 </time>
@@ -335,7 +336,9 @@ export function ArticleView(props: ArticleViewProps) {
               <GridItem tag="footer" {...smallGridItemProps}>
                 <div className={articleFooterClassName}>
                   <div className="comments">
-                    <a onClick={() => setCommentsVisible(true)}>Kommentare</a>
+                    <a onClick={() => setCommentsVisible(true)}>
+                      {localeContext.locale.text.comments}
+                    </a>
                   </div>
                   <div className="share">
                     <FacebookShareButton route={shareRoute} />
@@ -360,7 +363,7 @@ export function ArticleView(props: ArticleViewProps) {
           <div className={relatedArticlesClassName}>
             <section className={relatedArticlesContentClassName}>
               <div className={relatedArticlesTitleClassName}>
-                Weitere Artikel in dieser Rubrik
+                {localeContext.locale.text.relatedArticles}
               </div>
               <Grid
                 spacingHorizontal={3}
@@ -376,6 +379,9 @@ export function ArticleView(props: ArticleViewProps) {
                       <RelatedArticleBlock article={article} />
                     </GridItem>
                   ))}
+                  <GridItem span={4}>
+                    <SupportUsBlock />
+                  </GridItem>
                 </GridRow>
               </Grid>
             </section>
