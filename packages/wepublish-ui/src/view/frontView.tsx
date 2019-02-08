@@ -6,7 +6,7 @@ import {BrandBlock} from '../block/brandBlock'
 import {Grid, GridRow, GridItem} from '../components/grid'
 import {useThemeStyle} from '../context/themeContext'
 import {breakpoint, debugName} from '../style'
-import {SupportUsBlock} from '../block/supportUsBlock'
+import {DonationBlock} from '../block/donationBlock'
 
 export interface FrontViewProps {
   blocks?: Block[]
@@ -48,8 +48,8 @@ export function FrontView(props: FrontViewProps) {
   })
 
   blocks.splice(5 + 1, 0, {
-    id: 'supportUs',
-    type: CoreBlockType.SupportUs,
+    id: 'donation',
+    type: CoreBlockType.Donation,
     data: undefined
   })
 
@@ -92,10 +92,10 @@ function viewForBlock(block: Block) {
         </GridItem>
       )
 
-    case CoreBlockType.SupportUs:
+    case CoreBlockType.Donation:
       return (
         <GridItem span={3} spanBreakpoints={{[breakpoint.tablet]: 3}}>
-          <SupportUsBlock />
+          <DonationBlock />
         </GridItem>
       )
 

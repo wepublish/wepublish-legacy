@@ -23,7 +23,7 @@ import {
   EmailShareButton
 } from '../components/shareButton'
 import {Link} from '../components/link'
-import {SupportUsBlock} from '../block/supportUsBlock'
+import {DonationBlock} from '../block/donationBlock'
 
 export interface ArticleViewProps {
   article?: Article
@@ -380,7 +380,7 @@ export function ArticleView(props: ArticleViewProps) {
                     </GridItem>
                   ))}
                   <GridItem span={4}>
-                    <SupportUsBlock />
+                    <DonationBlock />
                   </GridItem>
                 </GridRow>
               </Grid>

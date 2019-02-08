@@ -1,6 +1,6 @@
 {
   "name": "@wepublish/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "./lib/cjs/index.js",
   "module": "./lib/es6/index.js",
   "types": "./lib/types/index.d.ts",
@@ -22,8 +22,8 @@
     "sync-package-info": "node ./../../scripts/syncPackageInfo.js ./src/version.ts"
   },
   "dependencies": {
-    "@wepublish/common": "^0.0.1",
-    "@wepublish/ui": "^0.0.3",
+    "@wepublish/common": "^0.0.2",
+    "@wepublish/ui": "^0.0.4",
     "react": "^16.8.0-alpha.1",
     "react-dom": "^16.8.0-alpha.1"
   },

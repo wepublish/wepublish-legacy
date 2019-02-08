@@ -5,10 +5,10 @@ import {debugName, mediaQueries, breakpoint} from '../style'
 import {media} from 'typestyle'
 import {Grid, GridRow, GridItem} from '../components/grid'
 
-export function SupportUsBlock() {
+export function DonationBlock() {
   const className = useThemeStyle(theme => [
     {
-      $debugName: debugName(SupportUsBlock),
+      $debugName: debugName(DonationBlock),
       border: `${px(1)} solid ${theme.colors.color3}`,
       borderRadius: `${rem(0.5)}`,
       lineHeight: 1.3,

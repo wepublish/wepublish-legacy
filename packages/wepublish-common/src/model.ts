@@ -4,7 +4,7 @@ import {slugify} from './utility'
 export enum CoreBlockType {
   Article = 'article',
   Brand = 'brand',
-  SupportUs = 'supportUs'
+  Donation = 'donation'
 }
 
 export interface Block<T = any> {
